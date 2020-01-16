@@ -19,11 +19,11 @@
 
   <joint name="world_joint" type="fixed">
     <parent link="world" />
-    <child link = "podest" />
+    <child link = "platform" />
     <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <link name='podest'>
+  <link name='platform'>
     <pose>0 0 0 0 0 0</pose>
 
     <inertial>
@@ -46,8 +46,8 @@
     </visual>
   </link>
 
-  <joint name="podest_joint" type="fixed">
-    <parent link="podest" />
+  <joint name="platform_joint" type="fixed">
+    <parent link="platform" />
     <child link = "base_link" />
     <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
   </joint>

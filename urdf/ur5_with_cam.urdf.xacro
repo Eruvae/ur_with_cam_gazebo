@@ -378,22 +378,37 @@
       <child link="${prefix}tool0"/>
     </joint>
 
-    <gazebo reference="${prefix}tool0">
-      <sensor name="${prefix}tool0_camera" type="depth">
+    <link name="${prefix}camera_link"/>
+    <joint name="${prefix}tool0_camera-link_fixed_joint" type="fixed">
+      <origin xyz="0 0 0.02" rpy="0 ${pi/-2.0} ${pi/-2.0}"/>
+      <parent link="${prefix}tool0"/>
+      <child link="${prefix}camera_link"/>
+    </joint>
+
+    <link name="${prefix}camera_depth_frame"/>
+
+    <joint name="${prefix}camera-link_camera-depth_fixed_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${pi/-2.0} 0 ${pi/-2.0}"/>
+      <parent link="${prefix}camera_link"/>
+      <child link="${prefix}camera_depth_frame"/>
+    </joint>
+
+    <gazebo reference="${prefix}camera_link">
+      <sensor name="${prefix}camera" type="depth">
         <update_rate>20</update_rate>
         <camera>
           <horizontal_fov>1.047198</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
-            <format>R8G8B8</format>
+            <format>B8G8R8</format>
           </image>
           <clip>
             <near>0.05</near>
             <far>3</far>
           </clip>
         </camera>
-        <plugin name="${prefix}tool0_controller" filename="libgazebo_ros_openni_kinect.so">
+        <plugin name="${prefix}camera_controller" filename="libgazebo_ros_openni_kinect.so">
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
           <updateRate>1.0</updateRate>
@@ -403,7 +418,7 @@
           <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
           <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
           <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
-          <frameName>camera_link</frameName>
+          <frameName>${prefix}camera_depth_frame</frameName>
           <pointCloudCutoff>0.5</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
           <distortionK1>0.00000001</distortionK1>

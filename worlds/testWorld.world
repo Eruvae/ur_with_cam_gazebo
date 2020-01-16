@@ -123,15 +123,25 @@
       <pose frame=''>-0.008519 0.006897 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>1721 653000000</sim_time>
-      <real_time>151 50293070</real_time>
-      <wall_time>1579012237 274444173</wall_time>
-      <iterations>150085</iterations>
+      <sim_time>1771 354000000</sim_time>
+      <real_time>52 484953568</real_time>
+      <wall_time>1579175212 27179887</wall_time>
+      <iterations>49701</iterations>
       <model name='Floor_room'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='main'>
           <pose frame=''>0 0 0.01 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='capsicum_plant_6'>
+        <pose frame=''>-0.484444 0.000612 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link_capsicum_plant_6'>
+          <pose frame=''>-0.484444 0.000612 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -187,23 +197,13 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='oak_tree'>
-        <pose frame=''>-1.34751 -0.089895 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>-1.34751 -0.089895 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
       <light name='sun'>
         <pose frame=''>0 0 10 0 -0 0</pose>
       </light>
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>4.34842 -5.31324 4.36378 0 0.275643 2.35619</pose>
+        <pose frame=''>0.773898 -1.39428 1.07981 0 0.275643 2.35619</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -384,13 +384,20 @@
       </link>
       <pose frame=''>-6.12698 0.636849 0 0 -0 0</pose>
     </model>
-    <model name='oak_tree'>
-      <static>1</static>
-      <link name='link'>
+    <model name='capsicum_plant_6'>
+      <link name='link_capsicum_plant_6'>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://capsicum_plant_6/meshes/VG07_6.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
         <collision name='collision'>
           <geometry>
             <mesh>
-              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
+              <uri>model://capsicum_plant_6/meshes/VG07_6.dae</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -407,44 +414,11 @@
             </friction>
           </surface>
         </collision>
-        <visual name='branch'>
-          <geometry>
-            <mesh>
-              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
-              <submesh>
-                <name>Branch</name>
-              </submesh>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://oak_tree/materials/scripts/</uri>
-              <uri>model://oak_tree/materials/textures/</uri>
-              <name>OakTree/Branch</name>
-            </script>
-          </material>
-        </visual>
-        <visual name='bark'>
-          <geometry>
-            <mesh>
-              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
-              <submesh>
-                <name>Bark</name>
-              </submesh>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://oak_tree/materials/scripts/</uri>
-              <uri>model://oak_tree/materials/textures/</uri>
-              <name>OakTree/Bark</name>
-            </script>
-          </material>
-        </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>-1.34751 -0.089895 0 0 -0 0</pose>
+      <static>1</static>
+      <pose frame=''>-0.484444 0.000612 0 0 -0 0</pose>
     </model>
   </world>
 </sdf>
