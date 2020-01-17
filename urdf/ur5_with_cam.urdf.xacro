@@ -412,12 +412,12 @@
           <baseline>0.05</baseline>
           <alwaysOn>true</alwaysOn>
           <updateRate>1.0</updateRate>
-          <cameraName>camera_ir</cameraName>
-          <imageTopicName>/camera/color/image_raw</imageTopicName>
-          <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
-          <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
-          <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
-          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+          <cameraName>${prefix}camera</cameraName>
+          <imageTopicName>/${prefix}camera/color/image_raw</imageTopicName>
+          <cameraInfoTopicName>/${prefix}camera/color/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/${prefix}camera/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>/${prefix}camera/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>/${prefix}camera/depth/points</pointCloudTopicName>
           <frameName>${prefix}camera_depth_frame</frameName>
           <pointCloudCutoff>0.15</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
