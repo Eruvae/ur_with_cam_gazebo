@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Scene Geometry1
-        - /RoiOcTreeDisplay1
-        - /InflatedRoiOctreeDisplay1
       Splitter Ratio: 0.5
     Tree Height: 253
   - Class: rviz/Selection
@@ -277,17 +275,41 @@ Visualization Manager:
       Voxel Coloring: ROI Probability
       Voxel Rendering: Occupied Voxels
     - Class: roioctree_rviz_plugin/InflatedRoiOctreeDisplay
-      Enabled: true
+      Enabled: false
       Max. Height Display: 3.40282347e+38
       Max. Octree Depth: 16
       Min. Height Display: -3.40282347e+38
       Name: InflatedRoiOctreeDisplay
       Octomap Topic: /inflated_octomap
       Queue Size: 5
-      Value: true
+      Value: false
       Voxel Alpha: 0.200000003
       Voxel Coloring: ROIs
       Voxel Rendering: All Voxels
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /roi_vp_marker
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Arrow Length: 0.300000012
+      Axes Length: 0.300000012
+      Axes Radius: 0.00999999978
+      Class: rviz/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.0700000003
+      Head Radius: 0.0299999993
+      Name: PoseArray
+      Shaft Length: 0.230000004
+      Shaft Radius: 0.00999999978
+      Shape: Axes
+      Topic: /vp_array
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
