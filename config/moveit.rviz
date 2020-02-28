@@ -263,7 +263,7 @@ Visualization Manager:
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 1
-    - Class: roioctree_rviz_plugin/RoiOcTreeDisplay
+    - Class: octomap_vpp_rviz_plugin/RoiOcTreeDisplay
       Enabled: true
       Max. Height Display: 3.40282347e+38
       Max. Octree Depth: 16
@@ -275,7 +275,7 @@ Visualization Manager:
       Voxel Alpha: 1
       Voxel Coloring: ROI Probability
       Voxel Rendering: Occupied Voxels
-    - Class: roioctree_rviz_plugin/InflatedRoiOctreeDisplay
+    - Class: octomap_vpp_rviz_plugin/InflatedRoiOctreeDisplay
       Enabled: false
       Max. Height Display: 3.40282347e+38
       Max. Octree Depth: 16
