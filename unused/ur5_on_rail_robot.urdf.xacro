@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro"
+       name="ur5" >
+
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur5 -->
+  <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/ur5_with_cam.urdf.xacro" />
+
+  <!-- arm -->
+  <xacro:ur5_robot prefix="" joint_limited="false"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+  />
+
+  <link name='world' />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "rail_link" />
+    <origin xyz="0.0 0.0 0.025" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <link name='rail_link'>
+    <pose>0 0 0 0 0 0</pose>
+
+    <inertial>
+      <mass value="1000.0"/>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <inertia ixx="607.975" ixy="0.0" ixz="0.0" iyy="632.875" iyz="0.0" izz="16.6"/>
+      <!-- for a box: ixx = 0.083 * mass * (y*y + z*z), ixy = 0, ixz = 0, iyy = 0.083 * mass * (x*x + z*z), iyz = 0, izz = 0.083 * mass * (x*x + y*y) -->
+    </inertial>
+
+    <!--collision name='collision'>
+      <geometry>
+        <box size="0.095 0.095 0.845" />
+      </geometry>
+    </collision-->
+
+    <visual name='visual'>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="2 0.2 0.05" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="rail_joint" type="prismatic">
+      <parent link="rail_link" />
+      <child link = "wagon_link" />
+      <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0" />
+      <axis xyz="1 0 0" />
+      <limit lower="-1" upper="1" effort="150.0" velocity="3.15"/>
+      <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name='wagon_link'>
+    <pose>0 0 0 0 0 0</pose>
+
+    <inertial>
+      <mass value="50.0"/>
+      <origin rpy="0 0 0.05" xyz="0 0 0"/>
+      <inertia ixx="607.975" ixy="0.0" ixz="0.0" iyy="632.875" iyz="0.0" izz="16.6"/>
+      <!-- for a box: ixx = 0.083 * mass * (y*y + z*z), ixy = 0, ixz = 0, iyy = 0.083 * mass * (x*x + z*z), iyz = 0, izz = 0.083 * mass * (x*x + y*y) -->
+    </inertial>
+
+    <!--collision name='collision'>
+      <geometry>
+        <box size="0.095 0.095 0.845" />
+      </geometry>
+    </collision-->
+
+    <visual name='visual'>
+      <geometry>
+        <box size="0.2 0.2 0.05" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="wagon_joint" type="fixed">
+    <parent link="wagon_link" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <transmission name="rail_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="rail_joint">
+       <hardwareInterface>transmission_hw_interface</hardwareInterface>
+     </joint>
+     <actuator name="rail_motor">
+       <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+  </transmission>
+
+  <gazebo reference="rail_link">
+      <selfCollide>true</selfCollide>
+  </gazebo>
+  <gazebo reference="wagon_link">
+      <selfCollide>true</selfCollide>
+  </gazebo>
+
+</robot>
