@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /MotionPlanning1
         - /MotionPlanning1/Planning Request1
+        - /WorkspaceOcTreeDisplay1
       Splitter Ratio: 0.5
     Tree Height: 150
   - Class: rviz/Selection
@@ -301,7 +302,7 @@ Visualization Manager:
       Axes Radius: 0.00999999978
       Class: rviz/PoseArray
       Color: 255; 25; 0
-      Enabled: true
+      Enabled: false
       Head Length: 0.0700000003
       Head Radius: 0.0299999993
       Name: PoseArray
@@ -310,7 +311,7 @@ Visualization Manager:
       Shape: Axes
       Topic: /vp_array
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/Image
       Enabled: true
       Image Topic: /mask_rcnn/visualization
@@ -322,6 +323,27 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: raw
       Unreliable: false
+      Value: true
+    - Class: octomap_vpp_rviz_plugin/WorkspaceOcTreeDisplay
+      Enabled: true
+      Max. Height Display: 3.40282347e+38
+      Max. Octree Depth: 16
+      Min count: 0
+      Min. Height Display: -3.40282347e+38
+      Name: WorkspaceOcTreeDisplay
+      Octomap Topic: /workspace_tree
+      Queue Size: 5
+      Value: true
+      Voxel Alpha: 0.0500000007
+      Voxel Coloring: Count
+      Voxel Rendering: Outer Voxels
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /cube_vis
+      Name: Marker
+      Namespaces:
+        roi_cubes: true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -348,25 +370,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.82854009
+      Distance: 1.69626236
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.12696481
-        Y: 0.587716579
-        Z: 0.790824354
+        X: 0.520224452
+        Y: 0.153379455
+        Z: 0.868150771
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.570397913
+      Pitch: 0.590397894
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.98358107
+      Yaw: 5.91858053
     Saved: ~
 Window Geometry:
   Displays:
