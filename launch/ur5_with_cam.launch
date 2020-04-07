@@ -6,7 +6,7 @@
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find ur_with_cam_gazebo)/worlds/testWorld10.world"/>
+    <arg name="world_name" default="$(find ur_with_cam_gazebo)/worlds/testWorld11.world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
