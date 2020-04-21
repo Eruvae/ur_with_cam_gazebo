@@ -3,10 +3,12 @@
   <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
+  <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
+  <arg name="world_file" default="testWorld11.world" />
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find ur_with_cam_gazebo)/worlds/testWorld11.world"/>
+    <arg name="world_name" default="$(arg world_path)/$(arg world_file)"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
