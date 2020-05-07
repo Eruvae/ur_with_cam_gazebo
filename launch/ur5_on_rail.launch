@@ -3,6 +3,8 @@
   <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
+
+  <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains_rail.yaml" command="load"/-->
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -12,7 +14,7 @@
   </include>
 
   <!-- send robot urdf to param server -->
-  <include file="$(find ur_with_cam_gazebo)/launch/ur5_on_rail_upload.launch">
+  <include file="$(find ur_with_cam_gazebo)/launch/rail/ur5_on_rail_upload.launch">
     <arg name="limited" value="$(arg limited)"/>
   </include>
 

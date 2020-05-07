@@ -1,0 +1,22 @@
+linear_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+     - x_move_joint
+     - y_move_joint
+     - z_move_joint
+  constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      x_move_joint: {trajectory: 0.1, goal: 0.1}
+      y_move_joint: {trajectory: 0.1, goal: 0.1}
+      z_move_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate:  25
+  action_monitor_rate: 10
+linear_joint_group_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+     - x_move_joint
+     - y_move_joint
+     - z_move_joint
+

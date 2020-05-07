@@ -2,7 +2,7 @@
 <launch>
   <arg name="limited" default="false"/>
 
-  <include file="$(find ur5_moveit_config)/launch/planning_context.launch">
+  <include file="$(find ur_with_cam_gazebo)/launch/retractable/planning_context_retractable.launch">
     <arg name="limited" value="$(arg limited)" />
   </include>
 
@@ -29,16 +29,12 @@
   </include>
 
   <!-- Trajectory Execution Functionality -->
-  <include ns="move_group" file="$(find ur5_moveit_config)/launch/trajectory_execution.launch.xml" if="$(arg allow_trajectory_execution)">
+  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/retractable/trajectory_execution_retractable.launch.xml" if="$(arg allow_trajectory_execution)">
     <arg name="moveit_manage_controllers" value="true" />
-    <arg name="moveit_controller_manager" value="ur5" unless="$(arg fake_execution)"/>
-    <arg name="moveit_controller_manager" value="fake" if="$(arg fake_execution)"/>
   </include>
 
   <!-- Sensors Functionality -->
-  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
-    <arg name="moveit_sensor_manager" value="ur5" />
-  </include>
+  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/default/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)" />
 
   <!-- Start the actual move_group node/action server -->
   <node name="move_group" launch-prefix="$(arg launch_prefix)" pkg="moveit_ros_move_group" type="move_group" respawn="false" output="screen" args="$(arg command_args)">
