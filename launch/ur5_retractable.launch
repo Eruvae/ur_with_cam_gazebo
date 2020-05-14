@@ -5,7 +5,8 @@
   <arg name="gui" default="true" doc="Starts gazebo gui" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains_retractable.yaml" command="load"/-->
-  
+  <param name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
+
   <!-- send robot urdf to param server -->
   <include file="$(find ur_with_cam_gazebo)/launch/retractable/ur5_retractable_upload.launch">
     <arg name="limited" value="$(arg limited)"/>
