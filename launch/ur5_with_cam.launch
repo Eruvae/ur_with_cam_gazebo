@@ -3,14 +3,19 @@
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
-  <arg name="world_file" default="testWorld14.world" />
+  <arg name="world_name" default="world14" />
+  <arg name="tree_resolution" default="0.01" />
+  <arg name="planning_mode" default="automatic" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains.yaml" command="load"/-->
+  <param name="/world_name" type="str" value="$(arg world_name)" />
+  <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
   <param name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(arg world_path)/$(arg world_file)"/>
+    <arg name="world_name" default="$(arg world_path)/$(arg world_name).world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>

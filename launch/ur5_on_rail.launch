@@ -1,22 +1,26 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="limited" default="false"  doc="If true, limits joint range [-PI, PI] on all joints." />
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
+  <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
+  <arg name="world_name" default="world10" />
+  <arg name="tree_resolution" default="0.01" />
+  <arg name="planning_mode" default="automatic" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains_rail.yaml" command="load"/-->
+  <param name="/world_name" type="str" value="$(arg world_name)" />
+  <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
   
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find ur_with_cam_gazebo)/worlds/testWorld10.world"/>
+    <arg name="world_name" default="$(arg world_path)/$(arg world_name).world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
 
   <!-- send robot urdf to param server -->
-  <include file="$(find ur_with_cam_gazebo)/launch/rail/ur5_on_rail_upload.launch">
-    <arg name="limited" value="$(arg limited)"/>
-  </include>
+  <include file="$(find ur_with_cam_gazebo)/launch/rail/ur5_on_rail_upload.launch" />
 
   <!-- push robot_description to factory and spawn robot in gazebo (pi/2: 1.5708, pi/4: 0.785398)-->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="
