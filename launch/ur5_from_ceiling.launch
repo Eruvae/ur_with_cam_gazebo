@@ -4,12 +4,14 @@
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
   <arg name="world_name" default="world14" />
-  <arg name="tree_resolution" default="0.01" />
+  <arg name="tree_resolution" default="0.02" />
+  <arg name="workspace_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_from_ceiling/workspace_map.ot" />
   <arg name="planning_mode" default="automatic" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains.yaml" command="load"/-->
   <param name="/world_name" type="str" value="$(arg world_name)" />
   <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
   <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
   <param name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[0, 0, 0, 1.5708, -1.5708, 0]" />
   
