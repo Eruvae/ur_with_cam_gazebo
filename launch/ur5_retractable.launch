@@ -4,15 +4,21 @@
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
   <arg name="world_name" default="world18" />
-  <arg name="tree_resolution" default="0.02" />
+  <arg name="tree_resolution" default="0.01" />
   <arg name="workspace_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_retractable/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_retractable/workspace_map.ot" />
+  <arg name="map_frame" default="world" />
+  <arg name="ws_frame" default="world" />
   <arg name="planning_mode" default="automatic" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains_retractable.yaml" command="load"/-->
   <param name="/world_name" type="str" value="$(arg world_name)" />
   <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
   <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
+  <param name="/roi_viewpoint_planner/sampling_tree" type="str" value="$(arg sampling_tree)" />
   <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
+  <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
+  <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
   <param name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
 
   <!-- startup simulated world -->
@@ -45,5 +51,12 @@
   <!-- load other controllers -->
   <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load joint_group_position_controller" />
   <node name="linear_ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load linear_joint_group_position_controller" />
+
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+
+  <node pkg="nodelet" type="nodelet" name="detect_roi" args="load pointcloud_roi/FilterRedClusters nodelet_manager --no-bond">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
+  </node>
 
 </launch>
