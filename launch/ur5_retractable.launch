@@ -3,7 +3,7 @@
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
-  <arg name="world_name" default="world18" />
+  <arg name="world_name" default="world19" />
   <arg name="tree_resolution" default="0.01" />
   <arg name="workspace_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_retractable/workspace_map.ot" />
   <arg name="sampling_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_retractable/workspace_map.ot" />
