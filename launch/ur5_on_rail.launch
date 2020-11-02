@@ -6,7 +6,7 @@
   <arg name="world_name" default="world10" />
   <arg name="tree_resolution" default="0.02" />
   <!-- No workspace for UR with rail recorded, since not used, so load default for now -->
-  <arg name="workspace_tree" default="$(find phenorob_ur5e)/workspace_trees/ur_with_cam/workspace_map.ot" />
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
   <arg name="planning_mode" default="automatic" />
 
   <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains_rail.yaml" command="load"/-->
