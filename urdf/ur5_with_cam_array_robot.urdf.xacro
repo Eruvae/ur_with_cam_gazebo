@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro"
+       name="ur5" >
+
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur5 -->
+  <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/ur5_with_cam.urdf.xacro" />
+
+  <!-- camera array -->
+  <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/camera_array.urdf.xacro" />
+
+  <!-- arm -->
+  <!--xacro:ur5_robot prefix="" joint_limited="false"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+  /-->
+  <xacro:ur5_robot prefix="" joint_limited="true"
+    shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}" shoulder_lift_upper_limit="${pi}"
+    elbow_joint_lower_limit="${-pi}" elbow_joint_upper_limit="${pi}"
+    wrist_1_lower_limit="${-pi}" wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}" wrist_2_upper_limit="${pi}"
+    wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+  />
+
+  <xacro:camera_array prefix="" parent="tool0" xoff="0.03" yoff="0.027" zoff="0.027"
+  />
+
+  <link name='world' />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "platform" />
+    <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <link name='platform'>
+    <pose>0 0 0 0 0 0</pose>
+
+    <inertial>
+      <mass value="1000.0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="607.975" ixy="0.0" ixz="0.0" iyy="632.875" iyz="0.0" izz="16.6"/>
+      <!-- for a box: ixx = 0.083 * mass * (y*y + z*z), ixy = 0, ixz = 0, iyy = 0.083 * mass * (x*x + z*z), iyz = 0, izz = 0.083 * mass * (x*x + y*y) -->
+    </inertial>
+
+    <!--collision name='collision'>
+      <geometry>
+        <box size="0.095 0.095 0.845" />
+      </geometry>
+    </collision-->
+
+    <visual name='visual'>
+      <geometry>
+        <box size="0.1 0.1 0.85" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="platform_joint" type="fixed">
+    <parent link="platform" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
+  </joint>
+
+</robot>
