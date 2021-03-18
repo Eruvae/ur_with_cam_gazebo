@@ -10,11 +10,11 @@ Install the universal robots ROS packages. The most recent version can be found 
 
 ## Relevant launch files
 
-**ur5_with_cam.launch**: Simulated environment with arm on a static pole.
-
-**ur5_retractable.launch**: Simulated environment with arm on a retractable pole hanging from the ceiling, that can move in a 2x2m square.
-
-**ur5_with_cam_array.launch** and **ur5_retractable_with_cam_array.launch**: Same as above, but arm contains a simulated RGB camera array consisting of 9 cameras in addition to the single RGB-D camera.
+- **ur5_with_cam.launch**: Simulated environment with arm on a static pole.
+- **moveit_default.launch**: Intitialize moveit for static arm.
+- **ur5_retractable.launch**: Simulated environment with arm on a retractable pole hanging from the ceiling, that can move in a 2x2m square.
+- **moveit_retractable.launch**: Initialize moveit for retractable arm.
+- **ur5_with_cam_array.launch** and **ur5_retractable_with_cam_array.launch**: Same as above, but arm contains a simulated RGB camera array consisting of 9 cameras in addition to the single RGB-D camera.
 
 ## Parameters in launch files
 
