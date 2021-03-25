@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Planning Request1
+        - /NearestRegionOcTreeDisplay1
       Splitter Ratio: 0.5
     Tree Height: 243
   - Class: rviz/Selection
@@ -295,8 +296,7 @@ Visualization Manager:
       Marker Topic: /roi_vp_marker
       Name: MarkerArray
       Namespaces:
-        contourPoints: true
-        roiContourPoints: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -373,20 +373,32 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: octomap_vpp_rviz_plugin/CountingOcTreeDisplay
-      Enabled: true
+      Enabled: false
       Max color: 300
-      Max. Height Display: inf
+      Max. Height Display: 3.4028234663852886e+38
       Max. Octree Depth: 16
       Min color: 0
       Min count: 0
-      Min. Height Display: -inf
+      Min. Height Display: -3.4028234663852886e+38
       Name: CountingOcTreeDisplay
       Octomap Topic: /evaluate_planner/gt_fruits
+      Queue Size: 5
+      Value: false
+      Voxel Alpha: 1
+      Voxel Coloring: Discrete
+      Voxel Rendering: Outer Voxels
+    - Class: octomap_vpp_rviz_plugin/NearestRegionOcTreeDisplay
+      Enabled: true
+      Max. Height Display: 3.4028234663852886e+38
+      Max. Octree Depth: 16
+      Min. Height Display: -3.4028234663852886e+38
+      Name: NearestRegionOcTreeDisplay
+      Octomap Topic: /evaluate_planner/gt_fruits_inflated
       Queue Size: 5
       Value: true
       Voxel Alpha: 1
       Voxel Coloring: Discrete
-      Voxel Rendering: Outer Voxels
+      Voxel Rendering: With inflated regions
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -415,25 +427,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.183550477027893
+      Distance: 1.8844375610351562
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.5395886898040771
-        Y: 0.16622965037822723
-        Z: 0.6973376274108887
+        X: 0.5014013648033142
+        Y: 0.5065324306488037
+        Z: 0.7777796983718872
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7603978514671326
+      Pitch: 0.7203978896141052
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.588584899902344
+      Yaw: 5.628584861755371
     Saved: ~
 Window Geometry:
   Displays:
