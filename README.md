@@ -8,7 +8,7 @@ Run the install_models.sh script from the models folder or copy the models manua
 
 Install the universal robots ROS packages. The most recent version can be found [here](https://github.com/fmauch/universal_robot/tree/calibration_devel). See also the installation instructions for the [Universal Robots ROS Driver](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver) (only needed for physical arm).
 
-The launch files also start nodelets to publish pointclouds with marked regions of interst. You'll need the [pointcloud_roi](https://github.com/Eruvae/pointcloud_roi) and [pointcloud_roi_msgs](https://github.com/Eruvae/pointcloud_roi_msgs) packages to start those, or you can comment out the nodelets from the launch files if not needed.
+The launch files also start nodelets to publish pointclouds with marked regions of interest. You'll need the [pointcloud_roi](https://github.com/Eruvae/pointcloud_roi) and [pointcloud_roi_msgs](https://github.com/Eruvae/pointcloud_roi_msgs) packages to start those, or you can comment out the nodelets from the launch files if not needed.
 
 ## Relevant launch files
 
