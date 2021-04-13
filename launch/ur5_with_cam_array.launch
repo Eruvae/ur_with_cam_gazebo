@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
-  <arg name="world_name" default="m2s_test" />
+  <arg name="world_name" default="world14" />
   <arg name="tree_resolution" default="0.01" />
   <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
   <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />

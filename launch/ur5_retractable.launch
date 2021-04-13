@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
+  <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
   <arg name="world_name" default="world19" />
