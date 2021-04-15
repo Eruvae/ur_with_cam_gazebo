@@ -5,7 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1/Planning Request1
-        - /NearestRegionOcTreeDisplay1
       Splitter Ratio: 0.5
     Tree Height: 243
   - Class: rviz/Selection
@@ -381,7 +380,7 @@ Visualization Manager:
       Min count: 0
       Min. Height Display: -3.4028234663852886e+38
       Name: CountingOcTreeDisplay
-      Octomap Topic: /evaluate_planner/gt_fruits
+      Octomap Topic: /evaluator/gt_fruits
       Queue Size: 5
       Value: false
       Voxel Alpha: 1
@@ -393,7 +392,7 @@ Visualization Manager:
       Max. Octree Depth: 16
       Min. Height Display: -3.4028234663852886e+38
       Name: NearestRegionOcTreeDisplay
-      Octomap Topic: /evaluate_planner/gt_fruits_inflated
+      Octomap Topic: /evaluator/gt_fruits_inflated
       Queue Size: 5
       Value: true
       Voxel Alpha: 1
@@ -427,7 +426,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.8844375610351562
+      Distance: 2.7420740127563477
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
