@@ -126,10 +126,10 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='capsicum_plant_6'>
+      <model name='capsicum_plant_6_one_fruit'>
         <pose frame=''>0.469217 0.245923 0.18571 0 -0 2.46288</pose>
         <scale>1 1 1</scale>
-        <link name='link_capsicum_plant_6'>
+        <link name='link_capsicum_plant_6_one_fruit'>
           <pose frame=''>0.469217 0.245923 0.18571 0 -0 2.46288</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
@@ -580,8 +580,8 @@
     <audio>
       <device>default</device>
     </audio>
-    <model name='capsicum_plant_6'>
-      <link name='link_capsicum_plant_6'>
+    <model name='capsicum_plant_6_one_fruit'>
+      <link name='link_capsicum_plant_6_one_fruit'>
         <visual name='visual'>
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>

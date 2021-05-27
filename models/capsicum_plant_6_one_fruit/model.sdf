@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
-  <model name='capsicum_plant_6'>
-    <link name='link_capsicum_plant_6'>
+  <model name='capsicum_plant_6_one_fruit'>
+    <link name='link_capsicum_plant_6_one_fruit'>
        <visual name='visual'>
         <pose frame=''>0 0 0 0 0 0</pose>
         <geometry>
@@ -13,7 +13,7 @@
       <!--collision name='collision'>
         <geometry>
           <mesh>
-            <uri>model://capsicum_plant_6/meshes/VG07_6.dae</uri>
+            <uri>model://capsicum_plant_6_one_fruit/meshes/VG07_6_one_fruit.dae</uri>
           </mesh>
         </geometry>
        </collision-->
