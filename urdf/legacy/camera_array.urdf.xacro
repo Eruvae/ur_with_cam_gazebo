@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<robot name="camera_array" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="camera_array" params="prefix parent xoff yoff zoff">
+<!-- axis directions: x -> viewing direction; y: left; z: up -->
+
+<link name="${prefix}camera_main_link"/>
+<link name="${prefix}camera_left_link"/>
+<link name="${prefix}camera_right_link"/>
+<link name="${prefix}camera_up_link"/>
+<link name="${prefix}camera_down_link"/>
+<link name="${prefix}camera_upleft_link"/>
+<link name="${prefix}camera_upright_link"/>
+<link name="${prefix}camera_downleft_link"/>
+<link name="${prefix}camera_downright_link"/>
+
+<joint name="${prefix}${parent}_camera-main-link_fixed_joint" type="fixed">
+  <origin xyz="0 0 0.02" rpy="0 ${pi/-2.0} ${pi/-2.0}"/>
+  <parent link="${prefix}${parent}"/>
+  <child link="${prefix}camera_main_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-left_fixed_joint" type="fixed">
+  <origin xyz="${xoff/2} ${yoff} 0" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_left_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-right_fixed_joint" type="fixed">
+  <origin xyz="${xoff/2} ${-yoff} 0" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_right_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-up_fixed_joint" type="fixed">
+  <origin xyz="${xoff/2} 0 ${zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_up_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-down_fixed_joint" type="fixed">
+  <origin xyz="${xoff/2} 0 ${-zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_down_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-upleft_fixed_joint" type="fixed">
+  <origin xyz="${xoff} ${yoff} ${zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_upleft_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-upright_fixed_joint" type="fixed">
+  <origin xyz="${xoff} ${-yoff} ${zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_upright_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-downleft_fixed_joint" type="fixed">
+  <origin xyz="${xoff} ${yoff} ${-zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_downleft_link"/>
+</joint>
+
+<joint name="${prefix}camera-main-downright_fixed_joint" type="fixed">
+  <origin xyz="${xoff} ${-yoff} ${-zoff}" rpy="0 0 0"/>
+  <parent link="${prefix}camera_main_link"/>
+  <child link="${prefix}camera_downright_link"/>
+</joint>
+
+<!-- Cam 1: main cam -->
+<gazebo reference="camera_main_link">
+  <sensor type="camera" name="camera_main">
+    <update_rate>30.0</update_rate>
+    <camera name="main">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/main</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_main_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 2: left cam -->
+<gazebo reference="camera_left_link">
+  <sensor type="camera" name="camera_left">
+    <update_rate>30.0</update_rate>
+    <camera name="left">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/left</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_left_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 3: right cam -->
+<gazebo reference="camera_right_link">
+  <sensor type="camera" name="camera_right">
+    <update_rate>30.0</update_rate>
+    <camera name="right">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/right</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_right_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 4: up cam -->
+<gazebo reference="camera_up_link">
+  <sensor type="camera" name="camera_up">
+    <update_rate>30.0</update_rate>
+    <camera name="up">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/up</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_up_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 5: down cam -->
+<gazebo reference="camera_down_link">
+  <sensor type="camera" name="camera_down">
+    <update_rate>30.0</update_rate>
+    <camera name="down">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/down</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_down_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 6: upleft cam -->
+<gazebo reference="camera_upleft_link">
+  <sensor type="camera" name="camera_upleft">
+    <update_rate>30.0</update_rate>
+    <camera name="upleft">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/upleft</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_upleft_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 7: upright cam -->
+<gazebo reference="camera_upright_link">
+  <sensor type="camera" name="camera_upright">
+    <update_rate>30.0</update_rate>
+    <camera name="upright">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/upright</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_upright_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 8: downleft cam -->
+<gazebo reference="camera_downleft_link">
+  <sensor type="camera" name="camera_downleft">
+    <update_rate>30.0</update_rate>
+    <camera name="downleft">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/downleft</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_downleft_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Cam 9: downright cam -->
+<gazebo reference="camera_downright_link">
+  <sensor type="camera" name="camera_downright">
+    <update_rate>30.0</update_rate>
+    <camera name="downright">
+      <horizontal_fov>${80*pi/180}</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>B8G8R8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>camera/downright</cameraName>
+      <imageTopicName>image_raw</imageTopicName>
+      <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+      <frameName>camera_downright_link</frameName>
+      <hackBaseline>0.0</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+</xacro:macro>
+</robot>

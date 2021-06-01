@@ -1,3 +1,0 @@
-<launch>
-  <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/camera.yaml" />
-</launch>

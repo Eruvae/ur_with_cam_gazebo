@@ -1,0 +1,28 @@
+<launch>
+
+  <!-- This file makes it easy to include the settings for trajectory execution  -->  
+
+  <!-- Flag indicating whether MoveIt! is allowed to load/unload  or switch controllers -->
+  <arg name="base" default="static"/>
+  <arg name="moveit_manage_controllers" default="true"/>
+  <param name="moveit_manage_controllers" value="$(arg moveit_manage_controllers)"/>
+  <arg name="fake_execution" default="false"/>
+
+  <!-- When determining the expected duration of a trajectory, this multiplicative factor is applied to get the allowed duration of execution -->
+  <param name="trajectory_execution/allowed_execution_duration_scaling" value="1.2"/> <!-- default 1.2 -->
+  <!-- Allow more than the expected execution time before triggering a trajectory cancel (applied after scaling) -->
+  <param name="trajectory_execution/allowed_goal_duration_margin" value="0.5"/> <!-- default 0.5 -->
+  
+  <!-- Load the robot specific controller manager; this sets the moveit_controller_manager ROS parameter -->
+  <group if="$(arg fake_execution)">
+    <param name="moveit_controller_manager" value="moveit_fake_controller_manager/MoveItFakeControllerManager"/>
+    <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/fake_controllers.yaml"/>
+  </group>
+  <group unless="$(arg fake_execution)">
+    <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/ros_controllers.yaml"/>
+    <param name="use_controller_manager" value="false"/>
+    <param name="trajectory_execution/execution_duration_monitoring" value="false"/>
+    <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager"/>
+  </group>
+  
+</launch>

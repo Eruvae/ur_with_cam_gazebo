@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot name="static_base" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="static_base" params="prefix arm_prefix">
+
+<joint name="${prefix}world_joint" type="fixed">
+  <parent link="world" />
+  <child link = "${prefix}platform" />
+  <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
+</joint>
+
+<link name='${prefix}platform'>
+  <pose>0 0 0 0 0 0</pose>
+
+  <inertial>
+    <mass value="1000.0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <inertia ixx="607.975" ixy="0.0" ixz="0.0" iyy="632.875" iyz="0.0" izz="16.6"/>
+    <!-- for a box: ixx = 0.083 * mass * (y*y + z*z), ixy = 0, ixz = 0, iyy = 0.083 * mass * (x*x + z*z), iyz = 0, izz = 0.083 * mass * (x*x + y*y) -->
+  </inertial>
+
+  <visual name='${prefix}platform_visual'>
+    <geometry>
+      <box size="0.1 0.1 0.85" />
+    </geometry>
+  </visual>
+</link>
+
+<joint name="${prefix}platform_joint" type="fixed">
+  <parent link="${prefix}platform" />
+  <child link = "${prefix}base_link" />
+  <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
+</joint>
+
+<xacro:if value="${arm_prefix != prefix}">
+  <link name="${prefix}base_link" />
+
+  <joint name="${prefix}${arm_prefix}connection_joint" type="fixed">
+    <parent link="${prefix}base_link" />
+    <child link = "${arm_prefix}base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+</xacro:if>
+
+</xacro:macro>
+</robot>

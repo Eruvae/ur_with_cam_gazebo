@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+  <!--Parameter files -->
+  <arg name="joint_limit_params"
+    doc="YAML file containing the joint limit values"
+    default="$(find ur_with_cam_gazebo)/config/common/joint_limits.yaml"/>
+  <arg name="kinematics_params"
+    doc="YAML file containing the robot's kinematic parameters. These will be different for each robot as they contain the robot's calibration."
+    default="$(find ur_with_cam_gazebo)/config/common/default_kinematics.yaml"/>
+  <arg name="physical_params"
+    doc="YAML file containing the phycical parameters of the robots"
+    default="$(find ur_with_cam_gazebo)/config/common/physical_parameters.yaml"/>
+  <arg name="visual_params"
+    doc="YAML file containing the visual model of the robots"
+    default="$(find ur_with_cam_gazebo)/config/common/visual_parameters.yaml"/>
+
+  <!--Common parameters -->
+  <arg name="transmission_hw_interface"
+    doc="The hardware_interface to expose for each joint in the simulated robot (one of: [PositionJointInterface, VelocityJointInterface, EffortJointInterface])"
+    default="hardware_interface/PositionJointInterface"/>
+  <arg name="safety_limits"
+    doc="If True, enable the safety limits controller"
+    default="false"/>
+  <arg name="safety_pos_margin"
+    doc="The lower/upper limits in the safety controller"
+    default="0.15"/>
+  <arg name="safety_k_position"
+    doc="Used to set k position in the safety controller"
+    default="20"/>
+
+  <!--Parameters added for ur_with_cam -->
+  <arg name="base" default="static" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
+    joint_limit_params:=$(arg joint_limit_params)
+    kinematics_params:=$(arg kinematics_params)
+    physical_params:=$(arg physical_params)
+    visual_params:=$(arg visual_params)
+    transmission_hw_interface:=$(arg transmission_hw_interface)
+    safety_limits:=$(arg safety_limits)
+    safety_pos_margin:=$(arg safety_pos_margin)
+    safety_k_position:=$(arg safety_k_position)
+    base:=$(arg base)
+    camera:=$(arg camera)
+    camera2:=$(arg camera2)"
+    />
+</launch>

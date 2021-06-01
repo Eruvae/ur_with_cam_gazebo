@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur_with_cam" >
+
+  <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_gazebo.xacro"/>
+
+  <!--Declare arguments -->
+  <xacro:arg name="joint_limit_params" default=""/>
+  <xacro:arg name="physical_params" default=""/>
+  <xacro:arg name="kinematics_params" default=""/>
+  <xacro:arg name="visual_params" default=""/>
+  <!--
+    legal values:
+      - hardware_interface/PositionJointInterface
+      - hardware_interface/VelocityJointInterface
+      - hardware_interface/EffortJointInterface
+
+    NOTE: this value must correspond to the controller configured in the
+          controller .yaml files in the 'config' directory.
+  -->
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:arg name="safety_limits" default="false"/>
+  <xacro:arg name="safety_pos_margin" default="0.15"/>
+  <xacro:arg name="safety_k_position" default="20"/>
+
+  <xacro:arg name="base" default="static"/>
+  <xacro:arg name="camera" default="depth_camera"/>
+  <xacro:arg name="camera2" default=""/>
+
+  <xacro:ur_robot_gazebo
+    prefix="arm_"
+    joint_limits_parameters_file="$(arg joint_limit_params)"
+    kinematics_parameters_file="$(arg kinematics_params)"
+    physical_parameters_file="$(arg physical_params)"
+    visual_parameters_file="$(arg visual_params)"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    safety_limits="$(arg safety_limits)"
+    safety_pos_margin="$(arg safety_pos_margin)"
+    safety_k_position="$(arg safety_k_position)"
+  />
+
+  <xacro:property name="camera" value="$(arg camera)"/>
+  <xacro:if value="${camera == 'depth_camera'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/depth_camera.xacro"/>
+    <xacro:depth_camera
+      prefix=""
+      parent="arm_tool0"
+    />
+  </xacro:if>
+  <xacro:if value="${camera == 'camera_array'}">
+    <xacro:camera_array
+      prefix=""
+      parent="arm_tool0"
+    />
+  </xacro:if>
+
+  <link name='world' />
+
+  <xacro:property name="base" value="$(arg base)"/>
+  <xacro:if value="${base == 'static'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/static_base.xacro"/>
+    <xacro:static_base
+      prefix=""
+      arm_prefix="arm_"
+    />
+  </xacro:if>
+  <xacro:if value="${base == 'retractable'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/retractable_base.xacro"/>
+    <xacro:retractable_base
+      prefix=""
+      arm_prefix="arm_"
+      transmission_hw_interface="$(arg transmission_hw_interface)"
+    />
+  </xacro:if>
+
+</robot>

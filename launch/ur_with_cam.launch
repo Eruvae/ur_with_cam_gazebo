@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo parameters -->
+  <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts Gazebo gui" />
+  <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
+  <arg name="world_name" default="world14" />
+  <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
+  <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF) which should be spawned into Gazebo." />
+
+  <!--ROI viewpoint planner configuration -->
+  <arg name="tree_resolution" default="0.01" />
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
+  <arg name="map_frame" default="world" />
+  <arg name="ws_frame" default="world" />
+  <arg name="planning_mode" default="automatic" />
+
+  <!--Robot description and related parameter files -->
+  <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
+  <arg name="joint_limit_params" default="$(find ur_with_cam_gazebo)/config/common/joint_limits.yaml"/>
+  <arg name="kinematics_params" default="$(find ur_with_cam_gazebo)/config/common/default_kinematics.yaml"/>
+  <arg name="physical_params" default="$(find ur_with_cam_gazebo)/config/common/physical_parameters.yaml"/>
+  <arg name="visual_params" default="$(find ur_with_cam_gazebo)/config/common/visual_parameters.yaml"/>
+  <arg name="base" default="static" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+
+  <!-- Controller configuration -->
+  <arg name="controller_config_file" default="$(find ur_with_cam_gazebo)/config/$(arg base)/ur_with_cam_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
+  <arg name="controllers" default="joint_state_controller pos_joint_traj_controller" doc="Controllers that are activated by default."/>
+  <arg name="stopped_controllers" default="joint_group_pos_controller" doc="Controllers that are initally loaded, but not started."/>
+
+  <!-- robot_state_publisher configuration -->
+  <arg name="tf_prefix" default="" doc="tf_prefix used for the robot."/>
+  <arg name="tf_pub_rate" default="500" doc="Rate at which robot_state_publisher should publish transforms."/>
+
+  <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains.yaml" command="load"/-->
+  <param name="/world_name" type="str" value="$(arg world_name)" />
+  <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
+  <param name="/roi_viewpoint_planner/sampling_tree" type="str" value="$(arg sampling_tree)" />
+  <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
+  <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
+  <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
+  <param name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+  
+  <!-- Load urdf on the parameter server -->
+  <include file="$(arg robot_description_file)">
+    <arg name="joint_limit_params" value="$(arg joint_limit_params)"/>
+    <arg name="kinematics_params" value="$(arg kinematics_params)"/>
+    <arg name="physical_params" value="$(arg physical_params)"/>
+    <arg name="visual_params" value="$(arg visual_params)"/>
+    <arg name="base" value="$(arg base)" />
+    <arg name="camera" default="$(arg camera)" />
+    <arg name="camera2" default="$(arg camera2)" />
+  </include>
+
+  <!-- Robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="$(arg tf_pub_rate)" />
+    <param name="tf_prefix" value="$(arg tf_prefix)" />
+  </node>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world_path)/$(arg world_name).world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- Load controller settings -->
+  <rosparam file="$(arg controller_config_file)" command="load"/>
+
+  <!-- Spawn the model loaded earlier in the simulation just started -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+    args="
+      -urdf
+      -param $(arg robot_description_param_name)
+      -model $(arg gazebo_model_name)"
+    output="screen" respawn="false" />
+
+  <!-- Load and start the controllers listed in the 'controllers' arg. -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner"
+    args="$(arg controllers)" output="screen" respawn="false" />
+
+  <!-- Load other controllers, but do not start them -->
+  <node name="ros_control_stopped_spawner" pkg="controller_manager" type="spawner"
+    args="--stopped $(arg stopped_controllers)" output="screen" respawn="false" />
+
+  <!-- Start moveit -->
+  <remap from="/scaled_pos_joint_traj_controller/follow_joint_trajectory" to="/pos_joint_traj_controller/follow_joint_trajectory"/>
+  <include file="$(find ur_with_cam_gazebo)/launch/inc/move_group.launch">
+    <arg name="base" value="$(arg base)" />
+  </include>
+
+  <!-- Start nodelet to publish detected ROIs -->
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+
+  <node pkg="nodelet" type="nodelet" name="detect_roi" args="load pointcloud_roi/FilterRedClusters nodelet_manager --no-bond">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
+  </node>
+
+</launch>
