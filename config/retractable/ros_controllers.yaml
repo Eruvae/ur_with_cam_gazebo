@@ -25,7 +25,20 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-- name: "scaled_pos_joint_traj_controller"
+- name: "pos_joint_traj_controller_arm"
   action_ns: follow_joint_trajectory
   type: FollowJointTrajectory
-  joints: *robot_joints
+  joints:
+    - arm_shoulder_pan_joint
+    - arm_shoulder_lift_joint
+    - arm_elbow_joint
+    - arm_wrist_1_joint
+    - arm_wrist_2_joint
+    - arm_wrist_3_joint
+- name: "pos_joint_traj_controller_linear"
+  action_ns: follow_joint_trajectory
+  type: FollowJointTrajectory
+  joints:
+    - x_move_joint
+    - y_move_joint
+    - z_move_joint

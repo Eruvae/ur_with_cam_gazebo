@@ -18,10 +18,29 @@
     <group name="linear">
         <chain base_link="base_link" tip_link="arm_base_link" />
     </group>
+    <group name="linear_endeffector">
+        <link name="arm_base_link" />
+    </group>
     <group name="arm">
         <chain base_link="arm_base_link" tip_link="arm_tool0" />
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="home" group="manipulator">
+        <joint name="arm_elbow_joint" value="0"/>
+        <joint name="arm_shoulder_lift_joint" value="0"/>
+        <joint name="arm_shoulder_pan_joint" value="0"/>
+        <joint name="arm_wrist_1_joint" value="0"/>
+        <joint name="arm_wrist_2_joint" value="0"/>
+        <joint name="arm_wrist_3_joint" value="0"/>
+        <joint name="x_move_joint" value="0"/>
+        <joint name="y_move_joint" value="0"/>
+        <joint name="z_move_joint" value="0"/>
+    </group_state>
+    <group_state name="home" group="linear">
+        <joint name="x_move_joint" value="0"/>
+        <joint name="y_move_joint" value="0"/>
+        <joint name="z_move_joint" value="0"/>
+    </group_state>
     <group_state name="home" group="arm">
         <joint name="arm_elbow_joint" value="0" />
         <joint name="arm_shoulder_lift_joint" value="0" />
@@ -40,6 +59,7 @@
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="moveit_ee" parent_link="arm_tool0" group="endeffector" />
+    <end_effector name="moveit_ee_linear" parent_link="arm_base_link" group="linear_endeffector"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="fixed_base" type="fixed" parent_frame="world" child_link="base_link" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
