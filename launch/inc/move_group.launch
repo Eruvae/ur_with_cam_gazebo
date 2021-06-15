@@ -4,6 +4,9 @@
   <!-- Select base for moveit configuration -->
   <arg name="base" default="static" />
 
+  <!-- Use custom RVP moveit plugin; OMPL otherwise -->
+  <arg name="use_rvp_moveit_plugin" default="false" />
+
   <!-- GDB Debug Option -->
   <arg name="debug" default="false" />
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
@@ -51,6 +54,7 @@
   <!-- Planning Functionality -->
   <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/inc/planning_pipeline.launch.xml">
     <arg name="base" value="$(arg base)" />
+    <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
   <!-- Trajectory Execution Functionality -->

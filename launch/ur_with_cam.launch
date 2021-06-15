@@ -15,6 +15,7 @@
   <arg name="map_frame" default="world" />
   <arg name="ws_frame" default="world" />
   <arg name="planning_mode" default="automatic" />
+  <arg name="use_rvp_moveit_plugin" default="false" />
 
   <!--Robot description and related parameter files -->
   <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
@@ -94,6 +95,7 @@
   <!-- Start moveit -->
   <include file="$(find ur_with_cam_gazebo)/launch/inc/move_group.launch">
     <arg name="base" value="$(arg base)" />
+    <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
   <!-- Start nodelet to publish detected ROIs -->

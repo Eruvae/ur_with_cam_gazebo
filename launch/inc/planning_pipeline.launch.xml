@@ -1,24 +1,36 @@
 <launch>
 
   <arg name="base" default="$(arg base)" />
+  <arg name="use_rvp_moveit_plugin" default="false" />
 
-  <!-- OMPL Plugin for MoveIt! -->
-  <arg name="planning_plugin" value="ompl_interface/OMPLPlanner" />
+  <group if="$(arg use_rvp_moveit_plugin)">
+    <!-- Custom RVP moveit plugin -->
+    <arg name="planning_plugin" value="roi_viewpoint_planner_moveit_plugins/RvpPlanner" />
 
-  <!-- The request adapters (plugins) used when planning with OMPL.
-       ORDER MATTERS -->
-  <arg name="planning_adapters" value="default_planner_request_adapters/AddTimeParameterization
-				       default_planner_request_adapters/FixWorkspaceBounds
-				       default_planner_request_adapters/FixStartStateBounds
-				       default_planner_request_adapters/FixStartStateCollision
-				       default_planner_request_adapters/FixStartStatePathConstraints" />
+    <param name="planning_plugin" value="$(arg planning_plugin)" />
+  </group>
 
-  <arg name="start_state_max_bounds_error" value="0.1" />
+  <group unless="$(arg use_rvp_moveit_plugin)">
+    <!-- OMPL Plugin for MoveIt! -->
+    <arg name="planning_plugin" value="ompl_interface/OMPLPlanner" />
 
-  <param name="planning_plugin" value="$(arg planning_plugin)" />
-  <param name="request_adapters" value="$(arg planning_adapters)" />
-  <param name="start_state_max_bounds_error" value="$(arg start_state_max_bounds_error)" />
+    <!-- The request adapters (plugins) used when planning with OMPL.
+         ORDER MATTERS -->
+    <arg name="planning_adapters" value="default_planner_request_adapters/AddTimeParameterization
+                                         default_planner_request_adapters/FixWorkspaceBounds
+                                         default_planner_request_adapters/FixStartStateBounds
+                                         default_planner_request_adapters/FixStartStateCollision
+                                         default_planner_request_adapters/FixStartStatePathConstraints" />
 
-  <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/ompl_planning.yaml"/>
+    <arg name="start_state_max_bounds_error" value="0.1" />
+
+    <param name="planning_plugin" value="$(arg planning_plugin)" />
+    <param name="request_adapters" value="$(arg planning_adapters)" />
+    <param name="start_state_max_bounds_error" value="$(arg start_state_max_bounds_error)" />
+
+    <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/ompl_planning.yaml"/>
+  </group>
+
+
 
 </launch>
