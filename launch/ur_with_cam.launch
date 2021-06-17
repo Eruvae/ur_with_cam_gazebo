@@ -98,12 +98,17 @@
     <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
-  <!-- Start nodelet to publish detected ROIs -->
-  <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+  <node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />´
+  </node>
 
-  <node pkg="nodelet" type="nodelet" name="detect_roi" args="load pointcloud_roi/FilterRedClusters nodelet_manager --no-bond">
+  <!-- Start nodelet to publish detected ROIs -->
+  <!--node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+
+  <node pkg="nodelet" type="nodelet" name="detect_roi" args="load pointcloud_roi/FilterRedClusters nodelet_manager no-bond">
     <remap from="~input" to="/camera/depth/points" />
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
-  </node>
+  </node-->
 
 </launch>
