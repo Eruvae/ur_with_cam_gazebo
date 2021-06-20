@@ -8,6 +8,8 @@
     <arg name="planning_plugin" value="roi_viewpoint_planner_moveit_plugins/RvpPlanner" />
 
     <param name="planning_plugin" value="$(arg planning_plugin)" />
+
+    <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/rvp_planning.yaml"/>
   </group>
 
   <group unless="$(arg use_rvp_moveit_plugin)">
