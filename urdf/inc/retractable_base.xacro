@@ -2,6 +2,7 @@
 <robot name="retractable_base" xmlns:xacro="http://ros.org/wiki/xacro">
 
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/retractable_base_transmissions.xacro" />
+<xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
 
 <xacro:macro name="retractable_base" params="prefix arm_prefix transmission_hw_interface
     x_move_joint_lower_limit:=-1   x_move_joint_upper_limit:=1
