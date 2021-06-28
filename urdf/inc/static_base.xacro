@@ -19,11 +19,16 @@
     <!-- for a box: ixx = 0.083 * mass * (y*y + z*z), ixy = 0, ixz = 0, iyy = 0.083 * mass * (x*x + z*z), iyz = 0, izz = 0.083 * mass * (x*x + y*y) -->
   </inertial>
 
-  <visual name='${prefix}platform_visual'>
+  <visual>
     <geometry>
-      <box size="0.1 0.1 0.85" />
+      <box size="0.1 0.1 0.82" />
     </geometry>
   </visual>
+  <collision>
+    <geometry>
+      <box size="0.1 0.1 0.82" />
+    </geometry>
+  </collision>
 </link>
 
 <joint name="${prefix}platform_joint" type="fixed">
