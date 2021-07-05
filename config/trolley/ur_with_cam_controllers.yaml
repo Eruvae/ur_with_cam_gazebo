@@ -1,0 +1,73 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: &loop_hz 500
+
+pos_joint_traj_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: &robot_joints
+    - platform_move_joint
+    - platform_lift_joint
+    - arm_shoulder_pan_joint
+    - arm_shoulder_lift_joint
+    - arm_elbow_joint
+    - arm_wrist_1_joint
+    - arm_wrist_2_joint
+    - arm_wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    platform_move_joint: {trajectory: 0.1, goal: 0.1}
+    platform_lift_joint: {trajectory: 0.1, goal: 0.1}
+    arm_shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    arm_shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    arm_elbow_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10
+pos_joint_traj_controller_linear:
+  type: position_controllers/JointTrajectoryController
+  joints: &linear_joints
+    - platform_move_joint
+    - platform_lift_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    platform_move_joint: {trajectory: 0.1, goal: 0.1}
+    platform_lift_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10
+pos_joint_traj_controller_arm:
+  type: position_controllers/JointTrajectoryController
+  joints: &arm_joints
+    - arm_shoulder_pan_joint
+    - arm_shoulder_lift_joint
+    - arm_elbow_joint
+    - arm_wrist_1_joint
+    - arm_wrist_2_joint
+    - arm_wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    arm_shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    arm_shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    arm_elbow_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    arm_wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10
+
+joint_group_pos_controller:
+  type: position_controllers/JointGroupPositionController
+  joints: *robot_joints
+joint_group_pos_controller_linear:
+  type: position_controllers/JointGroupPositionController
+  joints: *linear_joints
+joint_group_pos_controller_arm:
+  type: position_controllers/JointGroupPositionController
+  joints: *arm_joints

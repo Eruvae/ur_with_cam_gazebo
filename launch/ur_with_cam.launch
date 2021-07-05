@@ -29,10 +29,12 @@
 
   <!-- Controller configuration -->
   <arg name="controller_config_file" default="$(find ur_with_cam_gazebo)/config/$(arg base)/ur_with_cam_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
+  <arg if="$(eval arg('base') == 'static')" name="controllers" default="joint_state_controller pos_joint_traj_controller" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'static')" name="stopped_controllers" default="joint_group_pos_controller" doc="Controllers that are initally loaded, but not started."/>
   <arg if="$(eval arg('base') == 'retractable')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
   <arg if="$(eval arg('base') == 'retractable')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
-  <arg unless="$(eval arg('base') == 'retractable')" name="controllers" default="joint_state_controller pos_joint_traj_controller" doc="Controllers that are activated by default."/>
-  <arg unless="$(eval arg('base') == 'retractable')" name="stopped_controllers" default="joint_group_pos_controller" doc="Controllers that are initally loaded, but not started."/>
+  <arg if="$(eval arg('base') == 'trolley')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'trolley')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
 
   <!-- robot_state_publisher configuration -->
   <arg name="tf_prefix" default="" doc="tf_prefix used for the robot."/>
