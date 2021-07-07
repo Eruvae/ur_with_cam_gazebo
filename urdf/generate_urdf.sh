@@ -10,7 +10,7 @@ options[safety_limits]=false
 options[safety_pos_margin]=0.15
 options[safety_k_position]=20
 options[base]=static
-options[camera]=depth_camera
+options[camera]=l515
 
 # Read additional / override default options
 while (( "$#" )); do

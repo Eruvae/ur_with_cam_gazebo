@@ -7,7 +7,7 @@
 <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" />
 
 <!-- set use_nominal_extrinsics to true for simulation -->
-<xacro:sensor_d435 parent="${prefix}${parent}" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+<xacro:sensor_d435 parent="${prefix}${parent}" use_nominal_extrinsics="${use_nominal_extrinsics}">
   <origin xyz="0 -0.02 0.065" rpy="0 ${-5*pi/12} ${pi/-2.0}"/>
 </xacro:sensor_d435>
 
