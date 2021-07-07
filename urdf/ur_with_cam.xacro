@@ -56,6 +56,22 @@
       zoff="0.027"
     />
   </xacro:if>
+  <xacro:if value="${camera == 'l515'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/l515.xacro"/>
+    <xacro:camera_array
+      prefix=""
+      parent="arm_tool0"
+      use_nominal_extrinsics="false"
+    />
+  </xacro:if>
+  <xacro:if value="${camera == 'd435'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/d435.xacro"/>
+    <xacro:camera_array
+      prefix=""
+      parent="arm_tool0"
+      use_nominal_extrinsics="false"
+    />
+  </xacro:if>
 
   <xacro:property name="camera2" value="$(arg camera2)"/>
   <xacro:if value="${camera2 == 'depth_camera'}">
