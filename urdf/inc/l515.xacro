@@ -4,10 +4,49 @@
 <xacro:macro name="l515" params="prefix parent use_nominal_extrinsics">
 <!-- axis directions: x -> viewing direction; y: left; z: up -->
 
+<joint name="${prefix}camera_connection_fixed_joint" type="fixed">
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+  <parent link="${prefix}${parent}"/>
+  <child link="${prefix}camara_mount_link"/>
+</joint>
+
+<link name="${prefix}camara_mount_link">
+  <visual>
+    <geometry>
+      <mesh filename="package://phenorob_ur5e/meshes/cam_mount_l515.dae" />
+      <!-- For inertia computation, see: http://gazebosim.org/tutorials?tut=inertia&cat=build_robot
+      MeshLab Output with scale factor 10:
+      Mesh Bounding Box Size 0.593560 0.599999 0.599999
+      Mesh Bounding Box Diag 1.035525
+      Mesh Volume is 0.027052
+      Mesh Surface is 1.430674
+      Thin shell barycenter 0.222111 0.000000 -0.007050
+      Center of Mass is 0.200187 0.000000 -0.006609
+      Inertia Tensor is :
+      | 0.000801 0.000000 0.000060 |
+      | 0.000000 0.001563 -0.000000 |
+      | 0.000060 -0.000000 0.001678 |
+      Principal axes are :
+      | 0.997710 0.000000 0.067642 |
+      | -0.000000 1.000000 -0.000000 |
+      | -0.067642 0.000000 0.997710 |
+      axis momenta are :
+      | 0.000797 0.001563 0.001682 |
+      -->
+    </geometry>
+    <origin rpy="0 ${pi/-2.0} ${pi/-2.0}" xyz="0 0 0"/>
+  </visual>
+  <inertial>
+    <mass value="0.005"/>
+    <origin rpy="0 0 0" xyz="0.02 0.0 -0.00066"/>
+    <inertia ixx="0.0015" ixy="0.0" ixz="0.00011" iyy="0.0029" iyz="0.0" izz="0.0031"/>
+  </inertial>
+</link>
+
 <xacro:include filename="$(find realsense2_description)/urdf/_l515.urdf.xacro" />
 
 <!-- set use_nominal_extrinsics to true for simulation -->
-<xacro:sensor_l515 parent="${prefix}${parent}" use_nominal_extrinsics="${use_nominal_extrinsics}">
+<xacro:sensor_l515 parent="${prefix}camara_mount_link" use_nominal_extrinsics="${use_nominal_extrinsics}">
   <origin xyz="0 -0.02 0.065" rpy="0 ${pi/-2.0} ${pi/-2.0}"/>
 </xacro:sensor_l515>
 
