@@ -14,7 +14,10 @@
   <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
   <arg name="map_frame" default="world" />
   <arg name="ws_frame" default="world" />
+  <arg name="update_planning_tree" default="true" />
+  <arg name="initialize_evaluator" default="true" />
   <arg name="planning_mode" default="automatic" />
+
   <arg name="use_rvp_moveit_plugin" default="false" />
 
   <!--Robot description and related parameter files -->
@@ -48,6 +51,8 @@
   <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
   <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
   <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
+  <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
+  <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
   <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
   <param unless="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
   

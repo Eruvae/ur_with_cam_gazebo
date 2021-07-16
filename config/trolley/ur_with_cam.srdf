@@ -40,10 +40,10 @@
         <joint name="platform_lift_joint" value="0"/>
     </group_state>
     <group_state name="home" group="arm">
-        <joint name="arm_elbow_joint" value="0" />
-        <joint name="arm_shoulder_lift_joint" value="0" />
+        <joint name="arm_elbow_joint" value="1.5708" />
+        <joint name="arm_shoulder_lift_joint" value="-0.7854" />
         <joint name="arm_shoulder_pan_joint" value="0" />
-        <joint name="arm_wrist_1_joint" value="0" />
+        <joint name="arm_wrist_1_joint" value="-0.7854" />
         <joint name="arm_wrist_2_joint" value="0" />
         <joint name="arm_wrist_3_joint" value="0" />
     </group_state>
@@ -53,6 +53,30 @@
         <joint name="arm_shoulder_pan_joint" value="0" />
         <joint name="arm_wrist_1_joint" value="-1.5707" />
         <joint name="arm_wrist_2_joint" value="0" />
+        <joint name="arm_wrist_3_joint" value="-3.1415" />
+    </group_state>
+    <group_state name="left" group="arm">
+        <joint name="arm_elbow_joint" value="0" />
+        <joint name="arm_shoulder_lift_joint" value="-3.1415" />
+        <joint name="arm_shoulder_pan_joint" value="0" />
+        <joint name="arm_wrist_1_joint" value="-1.5707" />
+        <joint name="arm_wrist_2_joint" value="0" />
+        <joint name="arm_wrist_3_joint" value="-1.5707" />
+    </group_state>
+    <group_state name="zero" group="arm">
+        <joint name="arm_elbow_joint" value="0" />
+        <joint name="arm_shoulder_lift_joint" value="0" />
+        <joint name="arm_shoulder_pan_joint" value="0" />
+        <joint name="arm_wrist_1_joint" value="0" />
+        <joint name="arm_wrist_2_joint" value="0" />
+        <joint name="arm_wrist_3_joint" value="0" />
+    </group_state>
+    <group_state name="transport" group="arm">
+        <joint name="arm_elbow_joint" value="0" />
+        <joint name="arm_shoulder_lift_joint" value="0" />
+        <joint name="arm_shoulder_pan_joint" value="0" />
+        <joint name="arm_wrist_1_joint" value="0" />
+        <joint name="arm_wrist_2_joint" value="-1.5707" />
         <joint name="arm_wrist_3_joint" value="0" />
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
