@@ -10,8 +10,8 @@
 
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
-  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
-  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/ur_with_cam/workspace_map.ot" />
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
   <arg name="map_frame" default="world" />
   <arg name="ws_frame" default="world" />
   <arg name="update_planning_tree" default="true" />
