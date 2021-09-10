@@ -8,6 +8,16 @@
   <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
   <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF) which should be spawned into Gazebo." />
 
+  <!--Robot description and related parameter files -->
+  <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
+  <arg name="joint_limit_params" default="$(find ur_with_cam_gazebo)/config/common/joint_limits.yaml"/>
+  <arg name="kinematics_params" default="$(find ur_with_cam_gazebo)/config/common/default_kinematics.yaml"/>
+  <arg name="physical_params" default="$(find ur_with_cam_gazebo)/config/common/physical_parameters.yaml"/>
+  <arg name="visual_params" default="$(find ur_with_cam_gazebo)/config/common/visual_parameters.yaml"/>
+  <arg name="base" default="static" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
   <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
@@ -19,16 +29,6 @@
   <arg name="planning_mode" default="automatic" />
 
   <arg name="use_rvp_moveit_plugin" default="false" />
-
-  <!--Robot description and related parameter files -->
-  <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
-  <arg name="joint_limit_params" default="$(find ur_with_cam_gazebo)/config/common/joint_limits.yaml"/>
-  <arg name="kinematics_params" default="$(find ur_with_cam_gazebo)/config/common/default_kinematics.yaml"/>
-  <arg name="physical_params" default="$(find ur_with_cam_gazebo)/config/common/physical_parameters.yaml"/>
-  <arg name="visual_params" default="$(find ur_with_cam_gazebo)/config/common/visual_parameters.yaml"/>
-  <arg name="base" default="static" />
-  <arg name="camera" default="depth_camera" />
-  <arg name="camera2" default="" />
 
   <!-- Controller configuration -->
   <arg name="controller_config_file" default="$(find ur_with_cam_gazebo)/config/$(arg base)/ur_with_cam_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
