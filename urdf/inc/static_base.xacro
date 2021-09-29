@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="static_base" xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="static_base" params="prefix arm_prefix">
+<xacro:macro name="static_base" params="prefix arm_base_link">
 
 <joint name="${prefix}world_joint" type="fixed">
   <parent link="world" />
@@ -37,12 +37,12 @@
   <origin xyz="0.0 0.0 0.43" rpy="0.0 0.0 0.0" />
 </joint>
 
-<xacro:if value="${arm_prefix != prefix}">
+<xacro:if value="${arm_base_link != prefix + 'base_link'}">
   <link name="${prefix}base_link" />
 
-  <joint name="${prefix}${arm_prefix}connection_joint" type="fixed">
+  <joint name="${prefix}${arm_base_link}_connection_joint" type="fixed">
     <parent link="${prefix}base_link" />
-    <child link = "${arm_prefix}base_link" />
+    <child link = "${arm_base_link}" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 </xacro:if>

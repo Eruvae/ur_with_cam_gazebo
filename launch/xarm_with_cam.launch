@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo parameters -->
+  <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts Gazebo gui" />
+  <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
+  <arg name="world_name" default="world14" />
+  <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
+  <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF) which should be spawned into Gazebo." />
+
+  <!--Robot description and related parameter files -->
+  <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/xarm7/xarm7_upload.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
+  <arg name="arm" default="xarm7" />
+  <arg name="base" default="static" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+
+  <!--ROI viewpoint planner configuration -->
+  <arg name="tree_resolution" default="0.01" />
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/inflated_ws_tree.ot" />
+  <arg name="map_frame" default="world" />
+  <arg name="ws_frame" default="world" />
+  <arg name="update_planning_tree" default="true" />
+  <arg name="initialize_evaluator" default="true" />
+  <arg name="planning_mode" default="automatic" />
+
+  <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains.yaml" command="load"/-->
+  <param name="/world_name" type="str" value="$(arg world_name)" />
+  <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
+  <param name="/roi_viewpoint_planner/sampling_tree" type="str" value="$(arg sampling_tree)" />
+  <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
+  <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
+  <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
+  <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
+  <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
+  <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
+  <param unless="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+  
+  <!-- Load urdf on the parameter server -->
+  <include file="$(arg robot_description_file)">
+    <arg name="arm" value="$(arg arm)" />
+    <arg name="base" value="$(arg base)" />
+    <arg name="camera" default="$(arg camera)" />
+    <arg name="camera2" default="$(arg camera2)" />
+  </include>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world_path)/$(arg world_name).world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- Spawn the model loaded earlier in the simulation just started -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+    args="
+      -urdf
+      -param $(arg robot_description_param_name)
+      -model $(arg gazebo_model_name)"
+    output="screen" respawn="false" />
+
+  <arg name="effort_control" default="false"/>
+  <arg name="velocity_control" default="false"/>
+  <arg name="add_gripper" default="false" />
+  <arg name="namespace" default="xarm"/>
+
+  <rosparam file="$(find ur_with_cam_gazebo)/config/xarm7/static/xarm7_params.yaml" command="load" ns="$(arg namespace)"/>
+
+  <!-- load the corresponding controllers -->
+  <include file="$(find xarm_controller)/launch/xarm7_control.launch">
+    <arg name="run_demo_traj" value="false"/>
+    <arg name="effort_control" value="$(arg effort_control)"/>
+    <arg name="velocity_control" value="$(arg velocity_control)"/>
+    <arg name="add_gripper" value="$(arg add_gripper)" />
+  </include>
+
+  <!-- Remap the name space so it can send command to gazebo loaded controller -->
+  <!-- this remap must appear BEFORE move_group launch -->
+  <remap from="/follow_joint_trajectory" to="/xarm/xarm7_traj_controller/follow_joint_trajectory"/>
+  <arg name="xarm_traj_controller" value="$(eval 'xarm7_traj_controller_velocity' if arg('velocity_control') else 'xarm7_traj_controller')" />
+  <remap from="/follow_joint_trajectory" to="/$(arg namespace)/$(arg xarm_traj_controller)/follow_joint_trajectory"/>
+
+  <arg name="add_other_geometry" default="false"/>
+  <arg name="geometry_type" default="box"/>
+  <arg name="geometry_mass" default="0.1"/>
+  <arg name="geometry_height" default="0.1"/>
+  <arg name="geometry_radius" default="0.1"/>
+  <arg name="geometry_length" default="0.1"/>
+  <arg name="geometry_width" default="0.1"/>
+  <arg name="geometry_mesh_filename" default=""/>
+  <arg name="geometry_mesh_origin_xyz" default="'0 0 0'"/>
+  <arg name="geometry_mesh_origin_rpy" default="'0 0 0'"/>
+  <arg name="geometry_mesh_tcp_xyz" default="'0 0 0'"/>
+  <arg name="geometry_mesh_tcp_rpy" default="'0 0 0'"/>
+
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server, limit joint range within [-pi, pi] -->
+  <include file="$(find ur_with_cam_gazebo)/launch/xarm7/planning_context.launch.xml">
+    <arg name="load_robot_description" value="false"/>
+    <arg name="add_other_geometry" default="$(arg add_other_geometry)"/>
+    <arg name="geometry_type" default="$(arg geometry_type)"/>
+    <arg name="geometry_mass" default="$(arg geometry_mass)"/>
+    <arg name="geometry_height" default="$(arg geometry_height)"/>
+    <arg name="geometry_radius" default="$(arg geometry_radius)"/>
+    <arg name="geometry_length" default="$(arg geometry_length)"/>
+    <arg name="geometry_width" default="$(arg geometry_width)"/>
+    <arg name="geometry_mesh_filename" default="$(arg geometry_mesh_filename)"/>
+    <arg name="geometry_mesh_origin_xyz" default="$(arg geometry_mesh_origin_xyz)"/>
+    <arg name="geometry_mesh_origin_rpy" default="$(arg geometry_mesh_origin_rpy)"/>
+    <arg name="geometry_mesh_tcp_xyz" default="$(arg geometry_mesh_tcp_xyz)"/>
+    <arg name="geometry_mesh_tcp_rpy" default="$(arg geometry_mesh_tcp_rpy)"/>
+  </include>
+
+  <arg name="jnt_stat_source" default="[/joint_states]" />
+
+  <!-- publish /joint_states from specified source topic -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="/use_gui" value="false"/>
+    <rosparam param="/source_list" subst_value="True">$(arg jnt_stat_source)</rosparam>
+  </node>
+
+  <arg name="pub_tf" default="false" />
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node if="$(arg pub_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+  <arg name="load_move_group" default="true" />
+
+  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+  <include if="$(arg load_move_group)" file="$(find ur_with_cam_gazebo)/launch/xarm7/move_group.launch.xml">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />´
+  </node>
+
+  <!-- Start nodelet to publish detected ROIs -->
+  <!--node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+
+  <node pkg="nodelet" type="nodelet" name="detect_roi" args="load pointcloud_roi/FilterRedClusters nodelet_manager no-bond">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
+  </node-->
+
+</launch>

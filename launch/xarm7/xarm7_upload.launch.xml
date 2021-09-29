@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="limited" default="false" doc="If true, limits joint range [-PI, PI] on all joints." />
+
+  <!--Parameters added for ur_with_cam -->
+  <arg name="arm" default="xarm7" />
+  <arg name="base" default="static" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+
+  <param name="robot_description"
+    command="$(find xacro)/xacro
+    '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
+    arm:=$(arg arm)
+    base:=$(arg base)
+    camera:=$(arg camera)
+    camera2:=$(arg camera2)
+    limited:=$(arg limited)" />
+
+  <param name="robot_description_semantic" textfile="$(find ur_with_cam_gazebo)/config/xarm7/static/xarm7.srdf" />
+
+</launch>

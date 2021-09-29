@@ -5,7 +5,7 @@
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/trolley_base_transmissions.xacro" />
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
 
-<xacro:macro name="trollomatic" params="prefix arm_prefix transmission_hw_interface enable_collisions:=false enable_inertia:=true">
+<xacro:macro name="trollomatic" params="prefix arm_base_link transmission_hw_interface enable_collisions:=false enable_inertia:=true">
 
   <xacro:property name="PI" value="3.1415926535897931"/>
 
@@ -190,10 +190,10 @@
     <link name="${prefix}tracker">
   </link>
 
-  <xacro:if value="${arm_prefix != prefix}">
-    <joint name="${prefix}${arm_prefix}connection_joint" type="fixed">
+  <xacro:if value="${arm_base_link != prefix + 'base_link'}">
+    <joint name="${prefix}${arm_base_link}_connection_joint" type="fixed">
       <parent link="${prefix}platform_base" />
-      <child link = "${arm_prefix}base_link" />
+      <child link = "${arm_base_link}" />
       <origin xyz="0.49 0.03 0.1" rpy="0.0 0.0 0.0" />
     </joint>
   </xacro:if>

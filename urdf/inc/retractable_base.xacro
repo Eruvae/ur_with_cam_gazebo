@@ -4,7 +4,7 @@
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/retractable_base_transmissions.xacro" />
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
 
-<xacro:macro name="retractable_base" params="prefix arm_prefix transmission_hw_interface
+<xacro:macro name="retractable_base" params="prefix arm_base_link transmission_hw_interface
     x_move_joint_lower_limit:=-1   x_move_joint_upper_limit:=1
     y_move_joint_lower_limit:=-1   y_move_joint_upper_limit:=1
     z_move_joint_lower_limit:=0   z_move_joint_upper_limit:=1">
@@ -89,9 +89,9 @@
     </xacro:cylinder_inertial>
 </link>
 
-<joint name="${prefix}${arm_prefix}base_joint" type="fixed">
+<joint name="${prefix}${arm_base_link}_joint" type="fixed">
   <parent link="${prefix}move_z_link" />
-  <child link = "${arm_prefix}base_link" />
+  <child link = "${arm_base_link}" />
   <origin xyz="0.0 0.0 0.61" rpy="0.0 0.0 0.0" />
 </joint>
 

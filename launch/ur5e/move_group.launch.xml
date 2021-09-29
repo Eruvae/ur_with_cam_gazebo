@@ -46,26 +46,26 @@
 
   <arg name="load_robot_description" default="false" />
   <!-- load URDF, SRDF and joint_limits configuration -->
-  <include file="$(find ur_with_cam_gazebo)/launch/inc/planning_context.launch">
+  <include file="$(find ur_with_cam_gazebo)/launch/ur5e/planning_context.launch.xml">
     <arg name="base" value="$(arg base)" />
     <arg name="load_robot_description" value="$(arg load_robot_description)" />
   </include>
 
   <!-- Planning Functionality -->
-  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/inc/planning_pipeline.launch.xml">
+  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/ur5e/planning_pipeline.launch.xml">
     <arg name="base" value="$(arg base)" />
     <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
   <!-- Trajectory Execution Functionality -->
-  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/inc/trajectory_execution.launch.xml" if="$(arg allow_trajectory_execution)">
+  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/ur5e/trajectory_execution.launch.xml" if="$(arg allow_trajectory_execution)">
     <arg name="base" value="$(arg base)" />
     <arg name="moveit_manage_controllers" value="true" />
     <arg name="fake_execution" value="$(arg fake_execution)"/>
   </include>
 
   <!-- Sensors Functionality -->
-  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/inc/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
+  <include ns="move_group" file="$(find ur_with_cam_gazebo)/launch/ur5e/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
   </include>
 
   <!-- Start the actual move_group node/action server -->

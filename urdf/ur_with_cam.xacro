@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur_with_cam" >
 
-  <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_gazebo.xacro"/>
+  <xacro:arg name="arm" default="ur5e"/>
+  <xacro:arg name="base" default="static"/>
+  <xacro:arg name="camera" default="depth_camera"/>
+  <xacro:arg name="camera2" default=""/>
 
-  <!--Declare arguments -->
-  <xacro:arg name="joint_limit_params" default=""/>
-  <xacro:arg name="physical_params" default=""/>
-  <xacro:arg name="kinematics_params" default=""/>
-  <xacro:arg name="visual_params" default=""/>
   <!--
     legal values:
       - hardware_interface/PositionJointInterface
@@ -18,39 +16,88 @@
           controller .yaml files in the 'config' directory.
   -->
   <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
-  <xacro:arg name="safety_limits" default="false"/>
-  <xacro:arg name="safety_pos_margin" default="0.15"/>
-  <xacro:arg name="safety_k_position" default="20"/>
 
-  <xacro:arg name="base" default="static"/>
-  <xacro:arg name="camera" default="depth_camera"/>
-  <xacro:arg name="camera2" default=""/>
+  <xacro:property name="arm" value="$(arg arm)"/>
+  <xacro:if value="${arm == 'ur5e'}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_gazebo.xacro"/>
 
-  <xacro:ur_robot_gazebo
-    prefix="arm_"
-    joint_limits_parameters_file="$(arg joint_limit_params)"
-    kinematics_parameters_file="$(arg kinematics_params)"
-    physical_parameters_file="$(arg physical_params)"
-    visual_parameters_file="$(arg visual_params)"
-    transmission_hw_interface="$(arg transmission_hw_interface)"
-    safety_limits="$(arg safety_limits)"
-    safety_pos_margin="$(arg safety_pos_margin)"
-    safety_k_position="$(arg safety_k_position)"
-  />
+    <!--Declare arguments -->
+    <xacro:arg name="joint_limit_params" default=""/>
+    <xacro:arg name="physical_params" default=""/>
+    <xacro:arg name="kinematics_params" default=""/>
+    <xacro:arg name="visual_params" default=""/>
+    <xacro:arg name="safety_limits" default="false"/>
+    <xacro:arg name="safety_pos_margin" default="0.15"/>
+    <xacro:arg name="safety_k_position" default="20"/>
+
+    <xacro:ur_robot_gazebo
+      prefix="arm_"
+      joint_limits_parameters_file="$(arg joint_limit_params)"
+      kinematics_parameters_file="$(arg kinematics_params)"
+      physical_parameters_file="$(arg physical_params)"
+      visual_parameters_file="$(arg visual_params)"
+      transmission_hw_interface="$(arg transmission_hw_interface)"
+      safety_limits="$(arg safety_limits)"
+      safety_pos_margin="$(arg safety_pos_margin)"
+      safety_k_position="$(arg safety_k_position)"
+    />
+
+    <!-- ${prefix}base_link -> ${prefix}tool0-->
+    <xacro:property name="arm_base_link" value="arm_base_link"/>
+    <xacro:property name="tool_link" value="arm_tool0"/>
+  </xacro:if>
+    
+  <xacro:if value="${arm == 'xarm7'}">
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="ros_namespace" default="xarm"/>
+    <xacro:arg name="limited" default="false"/>
+    <xacro:arg name="effort_control" default="false"/>
+    <xacro:arg name="velocity_control" default="false"/>
+
+    <xacro:arg name="add_other_geometry" default="false"/>
+    <xacro:arg name="geometry_type" default="box"/>
+    <xacro:arg name="geometry_mass" default="0.1"/>
+    <xacro:arg name="geometry_height" default="0.1"/>
+    <xacro:arg name="geometry_radius" default="0.1"/>
+    <xacro:arg name="geometry_length" default="0.1"/>
+    <xacro:arg name="geometry_width" default="0.1"/>
+    <xacro:arg name="geometry_mesh_filename" default=""/>
+    <xacro:arg name="geometry_mesh_origin_xyz" default="0 0 0"/>
+    <xacro:arg name="geometry_mesh_origin_rpy" default="0 0 0"/>
+    <xacro:arg name="geometry_mesh_tcp_xyz" default="0 0 0"/>
+    <xacro:arg name="geometry_mesh_tcp_rpy" default="0 0 0"/>
+
+    <!-- load xarm7 robot -->
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/xarm7_robot_macro.xacro" />
+    <xacro:xarm7_robot prefix="$(arg prefix)" namespace="$(arg ros_namespace)" limited="$(arg limited)" 
+      effort_control="$(arg effort_control)" velocity_control="$(arg velocity_control)"
+      add_other_geometry="$(arg add_other_geometry)" 
+      geometry_type="$(arg geometry_type)" geometry_mass="$(arg geometry_mass)"
+      geometry_height="$(arg geometry_height)" geometry_radius="$(arg geometry_radius)"
+      geometry_length="$(arg geometry_length)" geometry_width="$(arg geometry_width)"
+      geometry_mesh_filename="$(arg geometry_mesh_filename)"
+      geometry_mesh_origin_xyz="$(arg geometry_mesh_origin_xyz)" geometry_mesh_origin_rpy="$(arg geometry_mesh_origin_rpy)"
+      geometry_mesh_tcp_xyz="$(arg geometry_mesh_tcp_xyz)" geometry_mesh_tcp_rpy="$(arg geometry_mesh_tcp_rpy)"
+    />
+
+    <!--${prefix}link_base -> ${prefix}link_eef -->
+    <xacro:property name="arm_base_link" value="link_base"/>
+    <xacro:property name="tool_link" value="link_eef"/>
+  </xacro:if>
 
   <xacro:property name="camera" value="$(arg camera)"/>
   <xacro:if value="${camera == 'depth_camera'}">
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/depth_camera.xacro"/>
     <xacro:depth_camera
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
     />
   </xacro:if>
   <xacro:if value="${camera == 'camera_array'}">
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/camera_array.xacro"/>
     <xacro:camera_array
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
       xoff="0.03"
       yoff="0.027"
       zoff="0.027"
@@ -60,7 +107,7 @@
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/l515.xacro"/>
     <xacro:l515
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
       use_nominal_extrinsics="false"
     />
   </xacro:if>
@@ -68,7 +115,7 @@
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/d435.xacro"/>
     <xacro:d435
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
       use_nominal_extrinsics="false"
     />
   </xacro:if>
@@ -78,14 +125,14 @@
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/depth_camera.xacro"/>
     <xacro:depth_camera
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
     />
   </xacro:if>
   <xacro:if value="${camera2 == 'camera_array'}">
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/camera_array.xacro"/>
     <xacro:camera_array
       prefix=""
-      parent="arm_tool0"
+      parent="${tool_link}"
       xoff="0.03"
       yoff="0.027"
       zoff="0.027"
@@ -99,14 +146,14 @@
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/static_base.xacro"/>
     <xacro:static_base
       prefix=""
-      arm_prefix="arm_"
+      arm_base_link="${arm_base_link}"
     />
   </xacro:if>
   <xacro:if value="${base == 'retractable'}">
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/retractable_base.xacro"/>
     <xacro:retractable_base
       prefix=""
-      arm_prefix="arm_"
+      arm_base_link="${arm_base_link}"
       transmission_hw_interface="$(arg transmission_hw_interface)"
     />
   </xacro:if>
@@ -114,7 +161,7 @@
     <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/trolley_base.xacro"/>
     <xacro:trollomatic
       prefix=""
-      arm_prefix="arm_"
+      arm_base_link="${arm_base_link}"
       transmission_hw_interface="$(arg transmission_hw_interface)"
     />
   </xacro:if>

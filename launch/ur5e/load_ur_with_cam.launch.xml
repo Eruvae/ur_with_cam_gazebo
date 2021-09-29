@@ -29,11 +29,13 @@
     default="20"/>
 
   <!--Parameters added for ur_with_cam -->
+  <arg name="arm" default="ur5e" />
   <arg name="base" default="static" />
   <arg name="camera" default="depth_camera" />
   <arg name="camera2" default="" />
 
   <param name="robot_description" command="$(find xacro)/xacro '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
+    arm:=$(arg arm)
     joint_limit_params:=$(arg joint_limit_params)
     kinematics_params:=$(arg kinematics_params)
     physical_params:=$(arg physical_params)

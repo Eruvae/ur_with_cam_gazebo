@@ -10,7 +10,7 @@
 
   <!-- Load universal robot description format (URDF) -->
   <group if="$(arg load_robot_description)">
-    <include file="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml">
+    <include file="$(find ur_with_cam_gazebo)/launch/ur5e/load_ur_with_cam.launch.xml">
       <arg name="base" value="$(arg base)" />
     </include>
   </group>

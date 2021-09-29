@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="base" default="$(arg base)" />
+  <arg name="base" default="static" />
   <arg name="use_rvp_moveit_plugin" default="false" />
 
   <group if="$(arg use_rvp_moveit_plugin)">
