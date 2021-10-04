@@ -35,8 +35,8 @@
   <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
   <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
   <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
-  <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
-  <param unless="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+  <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]" />
+  <param unless="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.5798, 0.9833, 0.4613, 1.3697, 1.0960, 1.3394, 2.1310]" />
   
   <!-- Load urdf on the parameter server -->
   <include file="$(arg robot_description_file)">
@@ -81,6 +81,7 @@
   <remap from="/follow_joint_trajectory" to="/xarm/xarm7_traj_controller/follow_joint_trajectory"/>
   <arg name="xarm_traj_controller" value="$(eval 'xarm7_traj_controller_velocity' if arg('velocity_control') else 'xarm7_traj_controller')" />
   <remap from="/follow_joint_trajectory" to="/$(arg namespace)/$(arg xarm_traj_controller)/follow_joint_trajectory"/>
+  <node pkg="topic_tools" type="relay" name="relay_joint_states_arm" args="/$(arg namespace)/joint_states /joint_states" />
 
   <arg name="add_other_geometry" default="false"/>
   <arg name="geometry_type" default="box"/>
