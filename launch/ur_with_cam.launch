@@ -118,4 +118,6 @@
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
   </node-->
 
+  <node name="kill_gazebo_node" pkg="ur_with_cam_gazebo" type="kill_gazebo.py"/>
+
 </launch>
