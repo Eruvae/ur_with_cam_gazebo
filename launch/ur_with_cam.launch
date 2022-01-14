@@ -118,4 +118,52 @@
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
   </node-->
 
+  <node name="voxblox_full_node" pkg="voxblox_ros" type="tsdf_server" output="screen" args="-alsologtostderr" clear_params="true">
+    <remap from="pointcloud" to="/camera/depth/points"/>
+    <param name="tsdf_voxel_size" value="0.02" />
+    <param name="tsdf_voxels_per_side" value="64" />
+    <param name="voxel_carving_enabled" value="true" />
+    <param name="color_mode" value="color" />
+    <param name="use_tf_transforms" value="true" />
+    <param name="update_mesh_every_n_sec" value="1.0" />
+    <param name="min_time_between_msgs_sec" value="0.0" />
+    <param name="method" value="simple" />
+    <param name="use_const_weight" value="false" />
+    <param name="allow_clear" value="true" />
+    <param name="verbose" value="false" />
+    <!--<param name="max_ray_length_m" value="1.0"/>-->
+    <param name="enable_icp" value="false"/>
+    <param name="icp_mini_batch_size" value="1000"/>
+    <param name="accumulate_icp_corrections" value="false"/>
+    <param name="publish_tsdf_info" value="true"/>
+    <param name="publish_pointclouds" value="true"/>
+    <!-- <param name="start_voxel_subsampling_factor" value="8"/> -->
+  </node>
+
+  <node name="voxblox_fruit_node" pkg="voxblox_ros" type="tsdf_server" output="screen" args="-alsologtostderr" clear_params="true">
+    <remap from="pointcloud" to="/detect_roi/roi_cloud"/>
+    <param name="tsdf_voxel_size" value="0.006" />
+    <param name="tsdf_voxels_per_side" value="64" />
+    <param name="voxel_carving_enabled" value="true" />
+    <param name="color_mode" value="color" />
+    <param name="use_tf_transforms" value="true" />
+    <param name="update_mesh_every_n_sec" value="1.0" />
+    <param name="min_time_between_msgs_sec" value="0.0" />
+    <param name="method" value="simple" />
+    <param name="use_const_weight" value="false" />
+    <param name="allow_clear" value="true" />
+    <param name="verbose" value="false" />
+    <!--<param name="max_ray_length_m" value="1.0"/>-->
+    <param name="enable_icp" value="false"/>
+    <param name="icp_mini_batch_size" value="1000"/>
+    <param name="accumulate_icp_corrections" value="false"/>
+    <param name="publish_tsdf_info" value="true"/>
+    <param name="publish_pointclouds" value="true"/>
+    <!-- <param name="start_voxel_subsampling_factor" value="8"/> -->
+  </node>
+
+  <node pkg="capsicum_superellipsoid_detector" type="detector_node" name="capsicum_superellipsoid_detector" output="screen" respawn="true">
+    <remap from="pc_in" to="/voxblox_fruit_node/surface_pointcloud"/>
+  </node>
+
 </launch>
