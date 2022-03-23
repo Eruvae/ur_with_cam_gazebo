@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='capsicum_plant_8'>
+    <link name='link_capsicum_plant_8'>
+       <visual name='visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://capsicum_plant_8/meshes/VG07_8.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!--collision name='collision'>
+        <geometry>
+          <mesh>
+            <uri>model://capsicum_plant_8/meshes/VG07_8.dae</uri>
+          </mesh>
+        </geometry>
+       </collision-->
+    </link>
+    <static>1</static>
+  </model>
+</sdf>

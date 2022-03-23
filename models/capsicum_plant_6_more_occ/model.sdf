@@ -13,7 +13,7 @@
       <!--collision name='collision'>
         <geometry>
           <mesh>
-            <uri>model://capsicum_plant_6/meshes/VG07_6.dae</uri>
+            <uri>model://capsicum_plant_6_more_occ/meshes/VG07_6_more_occ.dae</uri>
           </mesh>
         </geometry>
        </collision-->
