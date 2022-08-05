@@ -16,7 +16,7 @@ pos_joint_traj_controller:
     - arm_wrist_3_joint
   constraints:
     goal_time: 0.6
-    stopped_velocity_tolerance: 0.05
+    stopped_velocity_tolerance: 0
     x_move_joint: {trajectory: 0.1, goal: 0.1}
     y_move_joint: {trajectory: 0.1, goal: 0.1}
     z_move_joint: {trajectory: 0.1, goal: 0.1}
@@ -37,7 +37,7 @@ pos_joint_traj_controller_linear:
     - z_move_joint
   constraints:
     goal_time: 0.6
-    stopped_velocity_tolerance: 0.05
+    stopped_velocity_tolerance: 0
     x_move_joint: {trajectory: 0.1, goal: 0.1}
     y_move_joint: {trajectory: 0.1, goal: 0.1}
     z_move_joint: {trajectory: 0.1, goal: 0.1}
