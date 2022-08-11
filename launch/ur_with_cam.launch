@@ -52,6 +52,7 @@
   <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
   <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
   <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
+  <param name="/roi_viewpoint_planner/robot_description_param_name" type="str" value="$(arg robot_description_param_name)" />
   <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
   <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
   <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
@@ -59,6 +60,7 @@
   
   <!-- Load urdf on the parameter server -->
   <include file="$(arg robot_description_file)">
+    <arg name="robot_description_param_name" value="$(arg robot_description_param_name)"/>
     <arg name="joint_limit_params" value="$(arg joint_limit_params)"/>
     <arg name="kinematics_params" value="$(arg kinematics_params)"/>
     <arg name="physical_params" value="$(arg physical_params)"/>

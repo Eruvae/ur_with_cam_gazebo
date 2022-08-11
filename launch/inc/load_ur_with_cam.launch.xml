@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF)." />
+
   <!--Parameter files -->
   <arg name="joint_limit_params"
     doc="YAML file containing the joint limit values"
@@ -33,7 +35,7 @@
   <arg name="camera" default="depth_camera" />
   <arg name="camera2" default="" />
 
-  <param name="robot_description" command="$(find xacro)/xacro '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
+  <param name="$(arg robot_description_param_name)" command="$(find xacro)/xacro '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
     joint_limit_params:=$(arg joint_limit_params)
     kinematics_params:=$(arg kinematics_params)
     physical_params:=$(arg physical_params)
