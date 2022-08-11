@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot name="retractable_base" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/rail_base_transmissions.xacro" />
+<xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
+
+<xacro:macro name="rail_base" params="prefix arm_prefix transmission_hw_interface
+    x_move_joint_lower_limit:=0   x_move_joint_upper_limit:=4
+    z_move_joint_lower_limit:=0   z_move_joint_upper_limit:=1">
+
+<!-- Add URDF transmission elements (for ros_control) -->
+<xacro:retractable_base_transmissions prefix="${prefix}" hw_interface="${transmission_hw_interface}" />
+
+<joint name="world_joint" type="fixed">
+  <parent link="world" />
+  <child link = "${prefix}base_link" />
+  <origin xyz="0.0 2.0 0" rpy="0.0 0.0 0.0" />
+</joint>
+
+<link name="${prefix}base_link" >
+  <xacro:cylinder_inertial radius="0.06" length="0.2" mass="1">
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+  </xacro:cylinder_inertial>
+</link>
+
+<joint name="${prefix}x_move_joint" type="prismatic">
+    <parent link="${prefix}base_link" />
+    <child link = "${prefix}move_x_link" />
+    <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0" />
+    <axis xyz="0 -1 0" />
+    <limit lower="0" upper="4" effort="1000.0" velocity="3.15"/>
+    <dynamics damping="0.0" friction="0.0"/>
+</joint>
+
+<link name="${prefix}move_x_link" >
+    <xacro:cylinder_inertial radius="0.06" length="0.2" mass="1">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+</link>
+
+
+<joint name="${prefix}z_move_joint" type="prismatic">
+    <parent link="${prefix}move_x_link" />
+    <child link = "${prefix}move_z_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.5" effort="1000.0" velocity="3.15"/>
+    <dynamics damping="0.0" friction="0.0"/>
+</joint>
+
+<link name="${prefix}move_z_link">
+    <xacro:cylinder_inertial radius="0.05" length="1.2" mass="1">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+</link>
+
+<joint name="${prefix}${arm_prefix}base_joint" type="fixed">
+  <parent link="${prefix}move_z_link" />
+  <child link = "${arm_prefix}base_link" />
+  <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${-pi/2}" />
+</joint>
+
+</xacro:macro>
+</robot>

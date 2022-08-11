@@ -37,6 +37,8 @@
   <arg if="$(eval arg('base') == 'static')" name="stopped_controllers" default="joint_group_pos_controller" doc="Controllers that are initally loaded, but not started."/>
   <arg if="$(eval arg('base') == 'retractable')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
   <arg if="$(eval arg('base') == 'retractable')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
+  <arg if="$(eval arg('base') == 'rail')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'rail')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
   <arg if="$(eval arg('base') == 'trolley')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
   <arg if="$(eval arg('base') == 'trolley')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
 
