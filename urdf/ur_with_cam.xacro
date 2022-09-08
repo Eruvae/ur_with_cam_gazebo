@@ -26,6 +26,8 @@
   <xacro:arg name="camera" default="depth_camera"/>
   <xacro:arg name="camera2" default=""/>
 
+  <xacro:arg name="include_room" default="true"/>
+
   <xacro:ur_robot_gazebo
     prefix="arm_"
     joint_limits_parameters_file="$(arg joint_limit_params)"
@@ -125,6 +127,12 @@
       arm_prefix="arm_"
       transmission_hw_interface="$(arg transmission_hw_interface)"
     />
+  </xacro:if>
+
+  <xacro:property name="include_room" value="$(arg include_room)"/>
+  <xacro:if value="${include_room}">
+    <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/room.xacro"/>
+    <xacro:room/>
   </xacro:if>
 
 </robot>

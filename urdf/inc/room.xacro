@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot name="room" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/rail_base_transmissions.xacro" />
+<xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
+
+<xacro:macro name="room" params="x_size:=7.7 y_size:=7.7 z_size:=4.0 thickness:=0.2">
+
+<link name="ground_plane_box">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="${x_size} ${y_size} ${thickness}"/>
+        </geometry>
+        <material name="Grey">
+            <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="${x_size} ${y_size} ${thickness}"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="ground_plane_box" type="fixed">
+    <parent link="world" />
+    <child link="ground_plane_box" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+</joint>
+
+</xacro:macro>
+</robot>

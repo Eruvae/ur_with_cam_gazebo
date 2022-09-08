@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="retractable_base" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="rail_base" xmlns:xacro="http://ros.org/wiki/xacro">
 
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/rail_base_transmissions.xacro" />
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
