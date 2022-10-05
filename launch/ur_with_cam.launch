@@ -18,6 +18,7 @@
   <arg name="base" default="static" />
   <arg name="camera" default="depth_camera" />
   <arg name="camera2" default="" />
+  <arg name="include_room" type="bool" default="true" />
 
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
@@ -72,6 +73,7 @@
     <arg name="base" value="$(arg base)" />
     <arg name="camera" default="$(arg camera)" />
     <arg name="camera2" default="$(arg camera2)" />
+    <arg name="include_room" default="$(arg include_room)" />
   </include>
 
   <!-- Robot state publisher -->
