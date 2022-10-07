@@ -1,0 +1,12 @@
+ws_min_x: -0.975
+ws_min_y: -2.875
+ws_min_z:  0.105
+ws_max_x:  0.975
+ws_max_y:  2.975
+ws_max_z:  1.635
+sr_min_x: -0.975
+sr_min_y: -2.875
+sr_min_z:  0.105
+sr_max_x:  0.975
+sr_max_y:  2.975
+sr_max_z:  1.635

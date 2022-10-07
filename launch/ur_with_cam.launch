@@ -30,6 +30,9 @@
   <arg name="initialize_evaluator" default="true" />
   <arg name="planning_mode" default="automatic" />
 
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/roi_viewpoint_planner" />
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/view_motion_planner" />
+
   <arg name="use_rvp_moveit_plugin" default="false" />
 
   <!-- Controller configuration -->

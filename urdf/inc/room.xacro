@@ -7,15 +7,6 @@
 <xacro:macro name="room" params="x_size:=7.7 y_size:=7.7 z_size:=4.0 thickness:=0.2">
 
 <link name="ground_plane_box">
-    <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-            <box size="${x_size} ${y_size} ${thickness}"/>
-        </geometry>
-        <material name="Grey">
-            <color rgba="0.7 0.7 0.7 1.0"/>
-        </material>
-    </visual>
     <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
