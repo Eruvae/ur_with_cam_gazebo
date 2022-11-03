@@ -4,6 +4,7 @@
   <env name="GAZEBO_MODEL_PATH" value="$(find ur_with_cam_gazebo)/models" />
   <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts Gazebo gui" />
+  <arg name="gazebo_killer" default="true" doc="Starts Gazebo killer" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
   <arg name="world_name" default="world14" />
   <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
@@ -129,5 +130,7 @@
     <remap from="~input" to="/camera/depth/points" />
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
   </node-->
+
+  <node if="$(arg gazebo_killer)" name="gazebo_killer_node" pkg="ur_with_cam_gazebo" type="gazebo_killer_node.py"/>
 
 </launch>
