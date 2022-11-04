@@ -131,6 +131,25 @@
     </xacro:if>
   </link>
 
+  <link name="${prefix}platform_base_arm">
+    <visual>
+      <geometry>
+          <mesh filename="package://ur_with_cam_gazebo/meshes/arm_base_platform.dae" />
+        <!-- For inertia computation, see: http://gazebosim.org/tutorials?tut=inertia&cat=build_robot-->
+      </geometry>
+    </visual>
+    <xacro:if value="${enable_collisions}">
+      <collision>
+        <geometry>
+            <!-- <mesh filename="package://ur_with_cam_gazebo/meshes/arm_base_platform_with_corridor.dae" /> -->
+            <mesh filename="package://ur_with_cam_gazebo/meshes/arm_base_platform.dae" />
+          <!-- For inertia computation, see: http://gazebosim.org/tutorials?tut=inertia&cat=build_robot-->
+        </geometry>
+      </collision>
+    </xacro:if>
+  </link>
+
+
   <!--joint name="platform_base_to_control_box" type="fixed">
     <origin xyz="1.19 0 0.04" rpy="0 0 0"/>
     <parent link="platform_base"/>
@@ -148,6 +167,12 @@
       </material>
     </visual>
   </link-->
+
+  <joint name="arm_base_arm_joint" type="fixed">
+    <parent link="${prefix}platform_base" />
+    <child link = "${prefix}platform_base_arm" />
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
+  </joint>
 
   <!-- Camera fixed joints -->
   <joint name="${prefix}base_link_to_cam0" type="fixed">
@@ -194,7 +219,7 @@
     <joint name="${prefix}${arm_prefix}connection_joint" type="fixed">
       <parent link="${prefix}platform_base" />
       <child link = "${arm_prefix}base_link" />
-      <origin xyz="0.49 0.03 0.1" rpy="0.0 0.0 0.0" />
+      <origin xyz="0.1 -0.11 0.1" rpy="0.0 0.0 0.0" />
     </joint>
   </xacro:if>
 
