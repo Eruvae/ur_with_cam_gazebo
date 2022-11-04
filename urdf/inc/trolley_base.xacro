@@ -5,7 +5,7 @@
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/trolley_base_transmissions.xacro" />
 <xacro:include filename="$(find ur_with_cam_gazebo)/urdf/inc/ur_common.xacro" />
 
-<xacro:macro name="trollomatic" params="prefix arm_prefix transmission_hw_interface enable_collisions:=false enable_inertia:=true">
+<xacro:macro name="trollomatic" params="prefix arm_prefix transmission_hw_interface enable_collisions:=true enable_inertia:=true">
 
   <xacro:property name="PI" value="3.1415926535897931"/>
 
@@ -22,9 +22,20 @@
   </joint>
 
   <link name="${prefix}platform_start_link">
+    <!--
     <xacro:cylinder_inertial radius="0.06" length="0.2" mass="1">
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
+    -->
+    <!-- TODO: TEMPORARY FIX -->
+      <inertial>
+        <mass value="1.0"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia
+        ixx="0.1" ixy="0.0" ixz="0.0"
+        iyy="0.1" iyz="0.0"
+        izz="0.1"/>
+      </inertial>
   </link>
 
   <joint name="${prefix}platform_move_joint" type="prismatic">
@@ -148,6 +159,48 @@
       </collision>
     </xacro:if>
   </link>
+
+  <!-- for decreasing shaking -->
+  <gazebo reference="${prefix}platform_base">
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  <gazebo reference="${prefix}platform_base_arm">
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  <gazebo reference="${prefix}platform_lift_joint">
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  <gazebo reference="${prefix}base_link">
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  <gazebo reference="${prefix}platform_start_link">
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <maxVel>0.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
 
 
   <!--joint name="platform_base_to_control_box" type="fixed">
