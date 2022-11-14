@@ -19,7 +19,7 @@
   <arg name="base" default="static" />
   <arg name="camera" default="depth_camera" />
   <arg name="camera2" default="" />
-  <arg name="include_room" type="bool" default="true" />
+  <arg name="include_room" default="true" />
 
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />

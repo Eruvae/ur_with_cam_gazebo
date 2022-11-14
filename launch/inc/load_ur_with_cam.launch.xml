@@ -34,7 +34,7 @@
   <arg name="base" default="static" />
   <arg name="camera" default="depth_camera" />
   <arg name="camera2" default="" />
-  <arg name="include_room" type="bool" default="true" />
+  <arg name="include_room" default="true" />
 
   <param name="$(arg robot_description_param_name)" command="$(find xacro)/xacro '$(find ur_with_cam_gazebo)/urdf/ur_with_cam.xacro'
     joint_limit_params:=$(arg joint_limit_params)
