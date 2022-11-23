@@ -23,13 +23,17 @@
 
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
-  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
-  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/inflated_ws_tree.ot" />
-  <arg name="map_frame" default="world" />
-  <arg name="ws_frame" default="world" />
+  <arg name="map_frame" default="" doc="If not specified, autoselect from base."/>
+  <arg name="ws_frame" default="" doc="If not specified, autoselect from base."/>
+  <arg name="group_name" default="" doc="If not specified, autoselect from base."/>
   <arg name="update_planning_tree" default="true" />
   <arg name="initialize_evaluator" default="true" />
   <arg name="planning_mode" default="automatic" />
+
+  <!--Legacy workspace, replaced by bounding boxes in newer VMP versions-->
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/inflated_ws_tree.ot" />
+
 
   <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/roi_viewpoint_planner" />
   <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/view_motion_planner" />
@@ -57,8 +61,6 @@
   <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
   <param name="/roi_viewpoint_planner/sampling_tree" type="str" value="$(arg sampling_tree)" />
   <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
-  <param name="/roi_viewpoint_planner/map_frame" type="str" value="$(arg map_frame)" />
-  <param name="/roi_viewpoint_planner/ws_frame" type="str" value="$(arg ws_frame)" />
   <param name="/roi_viewpoint_planner/robot_description_param_name" type="str" value="$(arg robot_description_param_name)" />
   <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
   <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
@@ -66,6 +68,35 @@
   <param if="$(eval arg('base') == 'rail')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[0, 0, 0, 0, 0, 0, 0, 0]" />
   <param if="$(eval arg('base') == 'static')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
   <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+
+
+  <group if="$(eval arg('group_name') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/group_name" value="arm" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/group_name" value="manipulator" />
+  </group>
+  <group unless="$(eval arg('group_name') == '')">
+    <param name="/roi_viewpoint_planner/group_name" value="$(arg group_name)" />
+  </group>
+
+  <group if="$(eval arg('map_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="map" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('map_frame') == '')">
+    <param name="/roi_viewpoint_planner/map_frame" value="$(arg map_frame)" />
+  </group>
+
+  <group if="$(eval arg('ws_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/ws_frame" value="arm_base_link" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/ws_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('ws_frame') == '')">
+    <param name="/roi_viewpoint_planner/ws_frame" value="$(arg ws_frame)" />
+  </group>
+
+  <group if="$(eval arg('base') == 'trolley')" ns="trollomatic">
+    <!--node pkg="trolley_simulation" type="trolley_node" name="trolley_node" /-->
+  </group>
   
   <!-- Load urdf on the parameter server -->
   <include file="$(arg robot_description_file)">
