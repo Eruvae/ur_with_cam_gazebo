@@ -79,7 +79,7 @@
   </group>
 
   <group if="$(eval arg('map_frame') == '')">
-    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="map" />
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="world" />
     <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="world" />
   </group>
   <group unless="$(eval arg('map_frame') == '')">
@@ -94,8 +94,8 @@
     <param name="/roi_viewpoint_planner/ws_frame" value="$(arg ws_frame)" />
   </group>
 
-  <group if="$(eval arg('base') == 'trolley')" ns="trollomatic">
-    <!--node pkg="trolley_simulation" type="trolley_node" name="trolley_node" /-->
+  <group if="$(eval arg('base') == 'trolley')">
+    <node pkg="trolley_simulation" type="trolley_node" name="trollomatic" output="screen" />
   </group>
   
   <!-- Load urdf on the parameter server -->
