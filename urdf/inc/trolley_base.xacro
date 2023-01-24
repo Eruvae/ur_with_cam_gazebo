@@ -41,7 +41,7 @@
   <joint name="${prefix}platform_move_joint" type="prismatic">
     <origin xyz="-2.0 0.0 0.0" rpy="0.0 0.0 0.0" />
     <axis xyz="1 0 0"/>
-    <limit upper="4.0" lower="0.0" effort="1000" velocity="1.0"/>
+    <limit upper="3.0" lower="0.0" effort="1000" velocity="1.0"/>
     <parent link="${prefix}platform_start_link" />
     <child link = "${prefix}base_link" />
   </joint>

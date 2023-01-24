@@ -4,7 +4,7 @@
   <env name="GAZEBO_MODEL_PATH" value="$(find ur_with_cam_gazebo)/models" />
   <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts Gazebo gui" />
-  <arg name="gazebo_killer" default="false" doc="Starts Gazebo killer" />
+  <arg name="gazebo_killer" default="true" doc="Starts Gazebo killer" />
   <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
   <arg name="world_name" default="world14" />
   <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
@@ -23,8 +23,9 @@
 
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
-  <arg name="map_frame" default="" doc="If not specified, autoselect from base."/>
-  <arg name="ws_frame" default="" doc="If not specified, autoselect from base."/>
+  <arg name="map_frame" default="" doc="Octree/map frame. If not specified, autoselect from base."/>
+  <arg name="ws_frame" default="" doc="Workspace frame. If not specified, autoselect from base."/>
+  <arg name="pose_frame" default="" doc="Pose reference frame. If not specified, autoselect from base."/>
   <arg name="group_name" default="" doc="If not specified, autoselect from base."/>
   <arg name="update_planning_tree" default="true" />
   <arg name="initialize_evaluator" default="true" />
@@ -94,8 +95,18 @@
     <param name="/roi_viewpoint_planner/ws_frame" value="$(arg ws_frame)" />
   </group>
 
+  <group if="$(eval arg('pose_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/pose_frame" value="world" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/pose_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('pose_frame') == '')">
+    <param name="/roi_viewpoint_planner/pose_frame" value="$(arg pose_frame)" />
+  </group>
+
   <group if="$(eval arg('base') == 'trolley')">
-    <node pkg="trolley_simulation" type="trolley_node" name="trollomatic" output="screen" />
+    <node pkg="trolley_simulation" type="trolley_node" name="trollomatic" output="screen">
+      <!--param name="print_position_height" value="true" /-->
+    </node>
   </group>
   
   <!-- Load urdf on the parameter server -->

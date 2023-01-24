@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
+        - /MotionPlanning1/Scene Geometry1
       Splitter Ratio: 0.5
     Tree Height: 238
   - Class: rviz/Selection
@@ -212,7 +213,7 @@ Visualization Manager:
         Interactive Marker Size: 0.5
         Joint Violation Color: 255; 0; 255
         Planning Group: linear
-        Query Goal State: true
+        Query Goal State: false
         Query Start State: false
         Show Workspace: false
         Start State Alpha: 1
@@ -627,7 +628,23 @@ Visualization Manager:
       Marker Topic: /view_motion_planner/vm_searched_graph
       Name: MarkerArray
       Namespaces:
-        {}
+        Line: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /workspace
+      Name: Marker
+      Namespaces:
+        workspace: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /samplingRegion
+      Name: Marker
+      Namespaces:
+        samplingRegion: true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -658,7 +675,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.5829172134399414
+      Distance: 2.5881567001342773
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -666,17 +683,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.04664402827620506
-        Y: -2.03023362159729
-        Z: 1.2678757905960083
+        X: -0.5247350335121155
+        Y: -2.1117427349090576
+        Z: 1.916092872619629
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5903980135917664
+      Pitch: 0.41039809584617615
       Target Frame: <Fixed Frame>
-      Yaw: 3.563582420349121
+      Yaw: 4.513585567474365
     Saved: ~
 Window Geometry:
   Displays:
@@ -700,5 +717,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1867
-  X: 56
-  Y: 27
+  X: 575
+  Y: 216
