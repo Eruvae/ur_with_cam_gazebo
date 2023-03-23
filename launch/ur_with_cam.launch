@@ -160,6 +160,17 @@
     <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
+  <!-- Start depth_image_proc for depth to point_cloud conversion -->
+  <!-- Gazebo publishes its pointcloud to "/camera/depth/points_gazebo" but has alignment issues -->
+  <!-- NOTE: Use nodelet_manager instead of standalone if pre-processing the pointcloud is needed -->
+  <node pkg="nodelet" type="nodelet" name="depth_image_proc_for_gazebo" args="standalone depth_image_proc/point_cloud_xyzrgb">
+    <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
+    <remap from="rgb/image_rect_color" to="/camera/color/image_raw"/>
+    <remap from="depth_registered/image_rect" to="/camera/depth/image_raw"/>
+    <remap from="depth_registered/points" to="/camera/depth/points"/>
+    <param name="exact_sync" value="true"/>
+    <param name="queue_size" value="60"/>
+  </node>
   <node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
     <remap from="~input" to="/camera/depth/points" />
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />´
