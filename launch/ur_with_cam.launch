@@ -162,15 +162,26 @@
 
   <!-- Start depth_image_proc for depth to point_cloud conversion -->
   <!-- Gazebo publishes its pointcloud to "/camera/depth/points_gazebo" but has alignment issues -->
-  <!-- NOTE: Use nodelet_manager instead of standalone if pre-processing the pointcloud is needed -->
   <node pkg="nodelet" type="nodelet" name="depth_image_proc_for_gazebo" args="standalone depth_image_proc/point_cloud_xyzrgb">
     <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
     <remap from="rgb/image_rect_color" to="/camera/color/image_raw"/>
     <remap from="depth_registered/image_rect" to="/camera/depth/image_raw"/>
-    <remap from="depth_registered/points" to="/camera/depth/points"/>
+    <remap from="depth_registered/points" to="/camera/depth/points_filtered_sync"/>
     <param name="exact_sync" value="true"/>
     <param name="queue_size" value="60"/>
   </node>
+
+  <!-- Start robot body filter -->
+  <!-- NOTE: The nodelet is available but the nodelet interface has problems and crash on start randomly:
+    QH6248 qh_lib_check: Incorrect qhull library called.  Caller uses reentrant Qhull while library is non-reentrant                                                                               
+    QH6249 qh_lib_check: Incorrect qhull library called.  Size of qhT for caller is 8184, but for library is 2896.                                                                                 
+    QH6255 qh_lib_chck: Cannot continue.  Library 'qhull 7.2.0 (2015.2 2016/01/18)' uses a dynamic qhT via qh_QHpointer (e.g., qhull_p.so) -->
+  <node name="laser_filter" pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen">
+    <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/robot_body_filter.yaml" />
+    <remap from="~input" to="/camera/depth/points_filtered_sync"/>
+    <remap from="~output" to="/camera/depth/points"/>
+  </node>
+
   <node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
     <remap from="~input" to="/camera/depth/points" />
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />´

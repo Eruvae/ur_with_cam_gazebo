@@ -8,7 +8,7 @@ Run the install_models.sh script from the models folder or copy the models manua
 
 Install the universal robots ROS packages. The most recent version can be found [here](https://github.com/fmauch/universal_robot/tree/calibration_devel). See also the installation instructions for the [Universal Robots ROS Driver](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver) (only needed for physical arm).
 
-The launch file also starts nodelets to publish pointclouds with marked regions of interest. You'll need the [pointcloud_roi](https://github.com/Eruvae/pointcloud_roi) and [pointcloud_roi_msgs](https://github.com/Eruvae/pointcloud_roi_msgs) packages to start those, or you can comment out the nodelets from the launch file if not needed. The pointcloud_roi package depends on [yolact_ros_msgs](https://github.com/Eruvae/yolact_ros_msgs) ([yolact_ros](https://github.com/Eruvae/yolact_ros) is not required to run the simulation).
+The launch file also starts nodelets to publish pointclouds with marked regions of interest. You'll need the [pointcloud_roi](https://github.com/Eruvae/pointcloud_roi) and [pointcloud_roi_msgs](https://github.com/Eruvae/pointcloud_roi_msgs) packages to start those, or you can comment out the nodelets from the launch file if not needed. The pointcloud_roi package depends on [yolact_ros_msgs](https://github.com/Eruvae/yolact_ros_msgs) ([yolact_ros](https://github.com/Eruvae/yolact_ros) is not required to run the simulation). You'll also need [robot_body_filter](https://github.com/peci1/robot_body_filter) to prevent the robot mapping itself in various situations.
 
 ## Launch simulation
 

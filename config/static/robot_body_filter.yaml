@@ -1,0 +1,30 @@
+# https://github.com/peci1/robot_body_filter
+
+cloud_filter_chain:
+  # Only containment filtering
+  - name: robot_body_filter_containment
+    type: robot_body_filter/RobotBodyFilterPointCloud2
+    params:
+      debug/pcl/clip: false
+      debug/pcl/inside: false
+      debug/pcl/shadow: false
+      debug/marker/bounding_box: false
+      debug/marker/bounding_sphere: false
+      filter/keep_clouds_organized: false
+      #sensor/min_distance: 0.05
+      #sensor/max_distance: 10
+      body_model/inflation/scale: 1.0
+      body_model/inflation/padding: 0.03
+      body_model/robot_description_param: robot_description
+      filter/do_clipping: false
+      filter/do_contains_test: true
+      filter/do_shadow_test: false
+      only_links:
+        - base_link
+        - platform
+        - arm_shoulder_link
+        - arm_upper_arm_link
+        - arm_forearm_link
+        - arm_wrist_1_link
+        - arm_wrist_2_link
+        - arm_wrist_3_link
