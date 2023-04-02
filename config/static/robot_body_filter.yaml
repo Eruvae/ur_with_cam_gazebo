@@ -22,6 +22,7 @@ cloud_filter_chain:
       only_links:
         - base_link
         - platform
+        - arm_base_link_inertia
         - arm_shoulder_link
         - arm_upper_arm_link
         - arm_forearm_link

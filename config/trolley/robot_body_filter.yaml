@@ -20,9 +20,10 @@ cloud_filter_chain:
       filter/do_contains_test: true
       filter/do_shadow_test: false
       only_links:
-        - platform_start_link
+        - arm_base_link_inertia
         - base_link
         - platform_base
+        - platform_base_arm
         - arm_shoulder_link
         - arm_upper_arm_link
         - arm_forearm_link
