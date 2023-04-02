@@ -20,6 +20,7 @@ cloud_filter_chain:
       filter/do_contains_test: true
       filter/do_shadow_test: false
       only_links:
+        - arm_base_link_inertia
         - base_link
         - move_x_link
         - move_y_link
