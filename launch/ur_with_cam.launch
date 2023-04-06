@@ -21,6 +21,8 @@
   <arg name="camera2" default="" />
   <arg name="include_room" default="true" />
 
+  <arg name="use_robot_filter" default="true" />
+
   <!--ROI viewpoint planner configuration -->
   <arg name="tree_resolution" default="0.01" />
   <arg name="map_frame" default="" doc="Octree/map frame. If not specified, autoselect from base."/>
@@ -166,7 +168,8 @@
     <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
     <remap from="rgb/image_rect_color" to="/camera/color/image_raw"/>
     <remap from="depth_registered/image_rect" to="/camera/depth/image_raw"/>
-    <remap from="depth_registered/points" to="/camera/depth/points_filtered_sync"/>
+    <remap if="$(arg use_robot_filter)" from="depth_registered/points" to="/camera/depth/points_filtered_sync"/>
+    <remap unless="$(arg use_robot_filter)" from="depth_registered/points" to="/camera/depth/points"/>
     <param name="exact_sync" value="true"/>
     <param name="queue_size" value="60"/>
   </node>
@@ -176,7 +179,7 @@
     QH6248 qh_lib_check: Incorrect qhull library called.  Caller uses reentrant Qhull while library is non-reentrant                                                                               
     QH6249 qh_lib_check: Incorrect qhull library called.  Size of qhT for caller is 8184, but for library is 2896.                                                                                 
     QH6255 qh_lib_chck: Cannot continue.  Library 'qhull 7.2.0 (2015.2 2016/01/18)' uses a dynamic qhT via qh_QHpointer (e.g., qhull_p.so) -->
-  <node name="laser_filter" pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen">
+  <node if="$(arg use_robot_filter)" name="robot_body_filter" pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen">
     <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/robot_body_filter.yaml" />
     <remap from="~input" to="/camera/depth/points_filtered_sync"/>
     <remap from="~output" to="/camera/depth/points"/>
