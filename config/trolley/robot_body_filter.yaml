@@ -10,7 +10,7 @@ cloud_filter_chain:
       debug/pcl/shadow: false
       debug/marker/bounding_box: false
       debug/marker/bounding_sphere: false
-      filter/keep_clouds_organized: false
+      filter/keep_clouds_organized: true
       #sensor/min_distance: 0.05
       #sensor/max_distance: 10
       body_model/inflation/scale: 1.0
