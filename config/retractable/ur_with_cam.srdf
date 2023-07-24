@@ -57,6 +57,14 @@
         <joint name="arm_wrist_2_joint" value="0" />
         <joint name="arm_wrist_3_joint" value="0" />
     </group_state>
+    <group_state name="reverse" group="arm">
+        <joint name="arm_elbow_joint" value="0" />
+        <joint name="arm_shoulder_lift_joint" value="-3.1415" />
+        <joint name="arm_shoulder_pan_joint" value="0" />
+        <joint name="arm_wrist_1_joint" value="-1.5707" />
+        <joint name="arm_wrist_2_joint" value="-1.5707" />
+        <joint name="arm_wrist_3_joint" value="0" />
+    </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="moveit_ee" parent_link="arm_tool0" group="endeffector" />
     <end_effector name="moveit_ee_linear" parent_link="arm_base_link" group="linear_endeffector"/>

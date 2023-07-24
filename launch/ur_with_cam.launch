@@ -33,6 +33,9 @@
   <arg name="initialize_evaluator" default="true" />
   <arg name="planning_mode" default="automatic" />
 
+  <!--Additional view motion planner configuration -->
+  <arg name="map_type" default="octomap" />
+
   <!--Legacy workspace, replaced by bounding boxes in newer VMP versions-->
   <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
   <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/inflated_ws_tree.ot" />
@@ -67,11 +70,11 @@
   <param name="/roi_viewpoint_planner/robot_description_param_name" type="str" value="$(arg robot_description_param_name)" />
   <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
   <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
+  <param name="/view_motion_planner/map_type" type="str" value="$(arg map_type)" />
   <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
   <param if="$(eval arg('base') == 'rail')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[0, 0, 0, 0, 0, 0, 0, 0]" />
   <param if="$(eval arg('base') == 'static')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
   <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
-
 
   <group if="$(eval arg('group_name') == '')">
     <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/group_name" value="arm" />
@@ -110,6 +113,11 @@
       <!--param name="print_position_height" value="true" /-->
     </node>
   </group>
+
+  <param if="$(eval arg('world_name') == 'world22')" name="/view_motion_planner/trolley_num_vertical_segments" value="1" />
+  <param if="$(eval arg('world_name') == 'world22')" name="/roi_viewpoint_planner/trolley_num_vertical_segments" value="1" />
+  <param if="$(eval arg('world_name') == 'world23')" name="/view_motion_planner/trolley_num_vertical_segments" value="2" />
+  <param if="$(eval arg('world_name') == 'world23')" name="/roi_viewpoint_planner/trolley_num_vertical_segments" value="2" />
   
   <!-- Load urdf on the parameter server -->
   <include file="$(arg robot_description_file)">
@@ -162,9 +170,11 @@
     <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
   </include>
 
+  <node pkg="nodelet" type="nodelet" name="depth_convert_manager" args="manager"/>
+
   <!-- Start depth_image_proc for depth to point_cloud conversion -->
   <!-- Gazebo publishes its pointcloud to "/camera/depth/points_gazebo" but has alignment issues -->
-  <node pkg="nodelet" type="nodelet" name="depth_image_proc_for_gazebo" args="standalone depth_image_proc/point_cloud_xyzrgb">
+  <node pkg="nodelet" type="nodelet" name="depth_image_proc_for_gazebo" args="load depth_image_proc/point_cloud_xyzrgb depth_convert_manager">
     <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
     <remap from="rgb/image_rect_color" to="/camera/color/image_raw"/>
     <remap from="depth_registered/image_rect" to="/camera/depth/image_raw"/>
@@ -173,6 +183,9 @@
     <param name="exact_sync" value="true"/>
     <param name="queue_size" value="60"/>
   </node>
+
+  <!-- Publish metric depth image, needed for panoptic mapping -->
+  <!--node pkg="nodelet" ns="/camera/depth" type="nodelet" name="depth_image_convert_metric" args="load depth_image_proc/convert_metric depth_convert_manager" /-->
 
   <!-- Start robot body filter -->
   <!-- NOTE: The nodelet is available but the nodelet interface has problems and crash on start randomly:
@@ -185,9 +198,23 @@
     <remap from="~output" to="/camera/depth/points"/>
   </node>
 
-  <node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
+  <!--node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
     <remap from="~input" to="/camera/depth/points" />
-    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />´
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
+    <param name="transform_pointcloud" value="false" />
+  </node-->
+
+  <include file="$(find yolo_segmentation_ros)/launch/start.launch">
+    <arg name="output" value="log" />
+    <arg name="input_image" value="/camera/color/image_raw"/>
+  </include>
+
+  <node pkg="pointcloud_roi" type="filter_detected_roi_node" name="detect_roi" output="screen">
+    <remap from="~pc" to="/camera/depth/points" />
+    <remap from="~dets" to="/yolo_segmentation_ros_node/detections" />
+    <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
+    <param name="transform_pointcloud" value="false" />
+    <param name="publish_colored_cloud" value="true" />
   </node>
 
   <!-- Start nodelet to publish detected ROIs -->
@@ -199,5 +226,7 @@
   </node-->
 
   <node if="$(arg gazebo_killer)" name="gazebo_killer_node" pkg="ur_with_cam_gazebo" type="gazebo_killer_node.py"/>
+
+  <!--include file="$(find capsicum_superellipsoid_detector)/launch/start_sim.launch" /-->
 
 </launch>
