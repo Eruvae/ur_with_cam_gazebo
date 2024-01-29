@@ -5,6 +5,10 @@ cloud_filter_chain:
   - name: robot_body_filter_containment
     type: robot_body_filter/RobotBodyFilterPointCloud2
     params:
+      frames/fixed: 'world'
+      frames/sensor: 'camera_depth_frame'
+      frames/filtering: 'camera_depth_frame'
+      frames/output: 'camera_depth_frame'
       debug/pcl/clip: false
       debug/pcl/inside: false
       debug/pcl/shadow: false
