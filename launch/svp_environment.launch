@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo parameters -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find ur_with_cam_gazebo)/models" />
+  <arg name="paused" default="false" doc="Starts Gazebo in paused mode" />
+  <arg name="gui" default="true" doc="Starts Gazebo gui" />
+  <arg name="gazebo_killer" default="true" doc="Starts Gazebo killer" />
+  <arg name="world_path" default="$(find ur_with_cam_gazebo)/worlds" />
+  <arg name="world_name" default="world23" />
+  <arg name="gazebo_model_name" default="robot" doc="The name to give to the model in Gazebo (after spawning it)." />
+  <arg name="robot_description_param_name" default="robot_description" doc="Name of the parameter which contains the robot description (ie: URDF) which should be spawned into Gazebo." />
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg if="$(arg debug)"     name="launch_prefix" value="gdb -ex run --args" />
+
+
+  <!--Robot description and related parameter files -->
+  <arg name="robot_description_file" default="$(find ur_with_cam_gazebo)/launch/inc/load_ur_with_cam.launch.xml" doc="Launch file which populates the 'robot_description' parameter."/>
+  <arg name="joint_limit_params" default="$(find ur_with_cam_gazebo)/config/common/joint_limits.yaml"/>
+  <arg name="kinematics_params" default="$(find ur_with_cam_gazebo)/config/common/default_kinematics.yaml"/>
+  <arg name="physical_params" default="$(find ur_with_cam_gazebo)/config/common/physical_parameters.yaml"/>
+  <arg name="visual_params" default="$(find ur_with_cam_gazebo)/config/common/visual_parameters.yaml"/>
+  <arg name="base" default="trolley" />
+  <arg name="camera" default="depth_camera" />
+  <arg name="camera2" default="" />
+  <arg name="include_room" default="true" />
+
+  <arg name="use_robot_filter" default="true" />
+
+  <!--ROI viewpoint planner configuration -->
+  <arg name="tree_resolution" default="0.01" />
+  <arg name="map_frame" default="" doc="Octree/map frame. If not specified, autoselect from base."/>
+  <arg name="ws_frame" default="" doc="Workspace frame. If not specified, autoselect from base."/>
+  <arg name="pose_frame" default="" doc="Pose reference frame. If not specified, autoselect from base."/>
+  <arg name="group_name" default="" doc="If not specified, autoselect from base."/>
+  <arg name="update_planning_tree" default="true" />
+  <arg name="initialize_evaluator" default="true" />
+  <arg name="planning_mode" default="automatic" />
+
+  <!--Additional view motion planner configuration -->
+  <arg name="map_type" default="octomap" />
+
+  <!--Legacy workspace, replaced by bounding boxes in newer VMP versions-->
+  <arg name="workspace_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/workspace_map.ot" />
+  <arg name="sampling_tree" default="$(find ur_with_cam_gazebo)/workspace_trees/$(arg base)/inflated_ws_tree.ot" />
+
+
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/roi_viewpoint_planner" />
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/view_motion_planner" />
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/semantic_view_planner" />
+
+  <arg name="use_rvp_moveit_plugin" default="false" />
+
+  <!-- Controller configuration -->
+  <arg name="controller_config_file" default="$(find ur_with_cam_gazebo)/config/$(arg base)/ur_with_cam_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
+  <arg if="$(eval arg('base') == 'static')" name="controllers" default="joint_state_controller pos_joint_traj_controller" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'static')" name="stopped_controllers" default="joint_group_pos_controller" doc="Controllers that are initally loaded, but not started."/>
+  <arg if="$(eval arg('base') == 'retractable')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'retractable')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
+  <arg if="$(eval arg('base') == 'rail')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'rail')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
+  <arg if="$(eval arg('base') == 'trolley')" name="controllers" default="joint_state_controller pos_joint_traj_controller_linear pos_joint_traj_controller_arm" doc="Controllers that are activated by default."/>
+  <arg if="$(eval arg('base') == 'trolley')" name="stopped_controllers" default="pos_joint_traj_controller joint_group_pos_controller joint_group_pos_controller_linear joint_group_pos_controller_arm" doc="Controllers that are initally loaded, but not started."/>
+
+  <!-- robot_state_publisher configuration -->
+  <arg name="tf_prefix" default="" doc="tf_prefix used for the robot."/>
+  <arg name="tf_pub_rate" default="500" doc="Rate at which robot_state_publisher should publish transforms."/>
+
+  <!--rosparam file="$(find ur_with_cam_gazebo)/config/pid_gains.yaml" command="load"/-->
+  <param name="/world_name" type="str" value="$(arg world_name)" />
+  <param name="/roi_viewpoint_planner/tree_resolution" type="double" value="$(arg tree_resolution)" />
+  <param name="/roi_viewpoint_planner/workspace_tree" type="str" value="$(arg workspace_tree)" />
+  <param name="/roi_viewpoint_planner/sampling_tree" type="str" value="$(arg sampling_tree)" />
+  <param name="/evaluate_planner/planning_mode" type="str" value="$(arg planning_mode)" />
+  <param name="/roi_viewpoint_planner/robot_description_param_name" type="str" value="$(arg robot_description_param_name)" />
+  <param name="/roi_viewpoint_planner/update_planning_tree" type="bool" value="$(arg update_planning_tree)" />
+  <param name="/roi_viewpoint_planner/initialize_evaluator" type="bool" value="$(arg initialize_evaluator)" />
+  <param name="/view_motion_planner/map_type" type="str" value="$(arg map_type)" />
+  <param if="$(eval arg('base') == 'retractable')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.8, -0.2, 0, 0, 0, 0, 1.5708, -1.5708, 0]" />
+  <param if="$(eval arg('base') == 'rail')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[0, 0, 0, 0, 0, 0, 0, 0]" />
+  <param if="$(eval arg('base') == 'static')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+  <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/initial_joint_values" type="yaml" value="[-0.785398, 0.0, 0.785398, -0.785398, -0.785398, 0.0]" />
+
+  <group if="$(eval arg('group_name') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/group_name" value="arm" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/group_name" value="manipulator" />
+  </group>
+  <group unless="$(eval arg('group_name') == '')">
+    <param name="/roi_viewpoint_planner/group_name" value="$(arg group_name)" />
+  </group>
+
+  <group if="$(eval arg('map_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="world" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/map_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('map_frame') == '')">
+    <param name="/roi_viewpoint_planner/map_frame" value="$(arg map_frame)" />
+  </group>
+
+  <group if="$(eval arg('ws_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/ws_frame" value="arm_base_link" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/ws_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('ws_frame') == '')">
+    <param name="/roi_viewpoint_planner/ws_frame" value="$(arg ws_frame)" />
+  </group>
+
+  <group if="$(eval arg('pose_frame') == '')">
+    <param if="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/pose_frame" value="world" />
+    <param unless="$(eval arg('base') == 'trolley')" name="/roi_viewpoint_planner/pose_frame" value="world" />
+  </group>
+  <group unless="$(eval arg('pose_frame') == '')">
+    <param name="/roi_viewpoint_planner/pose_frame" value="$(arg pose_frame)" />
+  </group>
+
+  <param if="$(eval arg('world_name') == 'world22')" name="/view_motion_planner/trolley_num_vertical_segments" value="1" />
+  <param if="$(eval arg('world_name') == 'world22')" name="/roi_viewpoint_planner/trolley_num_vertical_segments" value="1" />
+  <param if="$(eval arg('world_name') == 'world23')" name="/view_motion_planner/trolley_num_vertical_segments" value="2" />
+  <param if="$(eval arg('world_name') == 'world23')" name="/roi_viewpoint_planner/trolley_num_vertical_segments" value="2" />
+  
+  <!-- Load urdf on the parameter server -->
+  <include file="$(arg robot_description_file)">
+    <arg name="robot_description_param_name" value="$(arg robot_description_param_name)"/>
+    <arg name="joint_limit_params" value="$(arg joint_limit_params)"/>
+    <arg name="kinematics_params" value="$(arg kinematics_params)"/>
+    <arg name="physical_params" value="$(arg physical_params)"/>
+    <arg name="visual_params" value="$(arg visual_params)"/>
+    <arg name="base" value="$(arg base)" />
+    <arg name="camera" default="$(arg camera)" />
+    <arg name="camera2" default="$(arg camera2)" />
+    <arg name="include_room" default="$(arg include_room)" />
+  </include>
+
+  <!-- Robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="$(arg tf_pub_rate)" />
+    <param name="tf_prefix" value="$(arg tf_prefix)" />
+  </node>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(arg world_path)/$(arg world_name).world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- Load controller settings -->
+  <rosparam file="$(arg controller_config_file)" command="load"/>
+
+  <!-- Spawn the model loaded earlier in the simulation just started -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+    args="
+      -urdf
+      -param $(arg robot_description_param_name)
+      -model $(arg gazebo_model_name)"
+    output="screen" respawn="false" />
+
+  <!-- Load and start the controllers listed in the 'controllers' arg. -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner"
+    args="$(arg controllers)" output="screen" respawn="false" />
+
+  <!-- Load other controllers, but do not start them -->
+  <node name="ros_control_stopped_spawner" pkg="controller_manager" type="spawner"
+    args="--stopped $(arg stopped_controllers)" output="screen" respawn="false" />
+
+  <!-- Start moveit -->
+  <include file="$(find ur_with_cam_gazebo)/launch/inc/move_group.launch">
+    <arg name="base" value="$(arg base)" />
+    <arg name="use_rvp_moveit_plugin" value="$(arg use_rvp_moveit_plugin)" />
+  </include>
+
+  <node pkg="nodelet" type="nodelet" name="depth_convert_manager" args="manager"/>
+
+  <!-- Start depth_image_proc for depth to point_cloud conversion -->
+  <!-- Gazebo publishes its pointcloud to "/camera/depth/points_gazebo" but has alignment issues -->
+  <node pkg="nodelet" type="nodelet" name="depth_image_proc_for_gazebo" args="load depth_image_proc/point_cloud_xyzrgb depth_convert_manager">
+    <remap from="rgb/camera_info" to="/camera/color/camera_info"/>
+    <remap from="rgb/image_rect_color" to="/camera/color/image_raw"/>
+    <remap from="depth_registered/image_rect" to="/camera/depth/image_raw"/>
+    <remap if="$(arg use_robot_filter)" from="depth_registered/points" to="/camera/depth/points_filtered_sync"/>
+    <remap unless="$(arg use_robot_filter)" from="depth_registered/points" to="/camera/depth/points"/>
+    <param name="exact_sync" value="true"/>
+    <param name="queue_size" value="60"/>
+  </node>
+
+  <!-- Publish metric depth image, needed for panoptic mapping -->
+  <!--node pkg="nodelet" ns="/camera/depth" type="nodelet" name="depth_image_convert_metric" args="load depth_image_proc/convert_metric depth_convert_manager" /-->
+
+  <!-- Start robot body filter -->
+  <!-- NOTE: The nodelet is available but the nodelet interface has problems and crash on start randomly:
+    QH6248 qh_lib_check: Incorrect qhull library called.  Caller uses reentrant Qhull while library is non-reentrant                                                                               
+    QH6249 qh_lib_check: Incorrect qhull library called.  Size of qhT for caller is 8184, but for library is 2896.                                                                                 
+    QH6255 qh_lib_chck: Cannot continue.  Library 'qhull 7.2.0 (2015.2 2016/01/18)' uses a dynamic qhT via qh_QHpointer (e.g., qhull_p.so) -->
+  <node if="$(arg use_robot_filter)" name="robot_body_filter" pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen">
+    <rosparam command="load" file="$(find ur_with_cam_gazebo)/config/$(arg base)/robot_body_filter.yaml" />
+    <remap from="~input" to="/camera/depth/points_filtered_sync"/>
+    <remap from="~output" to="/camera/depth/points"/>
+  </node>
+
+   <!-- Run a VoxelGrid filter to clean NaNs and downsample the data -->
+  <node pkg="nodelet" type="nodelet" name="voxel_grid" args="load pcl/VoxelGrid depth_convert_manager" output="screen">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~output" to="/camera/depth/points_downsampled" />
+    <param name="leaf_size" value="$(arg tree_resolution)"/>
+  </node>
+
+  <node pkg="rvp_evaluation" type="semantic_pointcloud_generator" name="semantic_pointcloud_generator">
+    <remap from="~input" to="/camera/depth/points_downsampled" />
+    <remap from="~output" to="/camera/depth/points_labeled" />
+    <param name="resolution" value="$(arg tree_resolution)"/>
+  </node>
+
+  <node name="dawn_ik_solver" pkg="dawn_ik" type="solver_node_trolley" output="screen">
+    <remap from="joint_trajectory_command" to="/pos_joint_traj_controller_arm/command"/>
+    <remap from="joint_trajectory_state" to="/pos_joint_traj_controller_arm/state"/>
+  </node>
+
+  <node name="semantic_view_planner" pkg="semantic_view_planner" type="planner_node" output="screen" launch-prefix="$(arg launch_prefix)" />
+
+  <include file="$(find ur_with_cam_gazebo)/launch/rviz.launch" />
+  
+  <node name="rqt" pkg="rqt_gui" type="rqt_gui"/>
+
+  <node if="$(arg gazebo_killer)" name="gazebo_killer_node" pkg="ur_with_cam_gazebo" type="gazebo_killer_node.py"/>
+
+  <!--include file="$(find capsicum_superellipsoid_detector)/launch/start_sim.launch" /-->
+
+</launch>

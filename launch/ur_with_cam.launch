@@ -43,6 +43,7 @@
 
   <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/roi_viewpoint_planner" />
   <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/view_motion_planner" />
+  <rosparam file="$(find ur_with_cam_gazebo)/config/$(arg base)/workspace.yaml" ns="/semantic_view_planner" />
 
   <arg name="use_rvp_moveit_plugin" default="false" />
 
@@ -198,6 +199,19 @@
     <remap from="~output" to="/camera/depth/points"/>
   </node>
 
+   <!-- Run a VoxelGrid filter to clean NaNs and downsample the data -->
+  <node pkg="nodelet" type="nodelet" name="voxel_grid" args="load pcl/VoxelGrid depth_convert_manager" output="screen">
+    <remap from="~input" to="/camera/depth/points" />
+    <remap from="~output" to="/camera/depth/points_downsampled" />
+    <param name="leaf_size" value="$(arg tree_resolution)"/>
+  </node>
+
+  <node pkg="rvp_evaluation" type="semantic_pointcloud_generator" name="semantic_pointcloud_generator">
+    <remap from="~input" to="/camera/depth/points_downsampled" />
+    <remap from="~output" to="/camera/depth/points_labeled" />
+    <param name="resolution" value="$(arg tree_resolution)"/>
+  </node>
+
   <!--node pkg="pointcloud_roi" type="filter_red_clusters_node" name="detect_roi">
     <remap from="~input" to="/camera/depth/points" />
     <remap from="~map_frame" to="/roi_viewpoint_planner/map_frame" />
@@ -207,6 +221,8 @@
   <include file="$(find yolo_segmentation_ros)/launch/start.launch">
     <arg name="output" value="log" />
     <arg name="input_image" value="/camera/color/image_raw"/>
+    <arg name="yolo_segmentation_ros_python" value="$(env HOME)/.virtualenvs/yolo_segmentation_ros/bin/python3"/>
+    <arg name="verbose" value="false"/>
   </include>
 
   <node pkg="pointcloud_roi" type="filter_detected_roi_node" name="detect_roi" output="screen">

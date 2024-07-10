@@ -87,6 +87,48 @@
         <joint name="arm_wrist_2_joint" value="-1.5707" />
         <joint name="arm_wrist_3_joint" value="0" />
     </group_state>
+
+    <group_state name="explpose1" group="arm">
+        <joint name="arm_elbow_joint" value="1.39612" />
+        <joint name="arm_shoulder_lift_joint" value="-1.29269" />
+        <joint name="arm_shoulder_pan_joint" value="0.10871" />
+        <joint name="arm_wrist_1_joint" value="-0.14595" />
+        <joint name="arm_wrist_2_joint" value="0.16553" />
+        <joint name="arm_wrist_3_joint" value="-0.00165" />
+    </group_state>
+    <group_state name="explpose2" group="arm">
+        <joint name="arm_elbow_joint" value="2.23546" />
+        <joint name="arm_shoulder_lift_joint" value="-1.46081" />
+        <joint name="arm_shoulder_pan_joint" value="0.43661" />
+        <joint name="arm_wrist_1_joint" value="-0.67236" />
+        <joint name="arm_wrist_2_joint" value="0.54481" />
+        <joint name="arm_wrist_3_joint" value="-0.60510" />
+    </group_state>
+    <group_state name="explpose3" group="arm">
+        <joint name="arm_elbow_joint" value="2.21691" />
+        <joint name="arm_shoulder_lift_joint" value="-1.90565" />
+        <joint name="arm_shoulder_pan_joint" value="-0.00126" />
+        <joint name="arm_wrist_1_joint" value="-2.36567" />
+        <joint name="arm_wrist_2_joint" value="0.00653" />
+        <joint name="arm_wrist_3_joint" value="2.05438" />
+    </group_state>
+    <group_state name="explpose4" group="arm">
+        <joint name="arm_elbow_joint" value="0.70654" />
+        <joint name="arm_shoulder_lift_joint" value="-0.98155" />
+        <joint name="arm_shoulder_pan_joint" value="0.00528" />
+        <joint name="arm_wrist_1_joint" value="0.12777" />
+        <joint name="arm_wrist_2_joint" value="0.35336" />
+        <joint name="arm_wrist_3_joint" value="-0.08737" />
+    </group_state>
+    <group_state name="explpose5" group="arm">
+        <joint name="arm_elbow_joint" value="-0.00425" />
+        <joint name="arm_shoulder_lift_joint" value="-0.37774" />
+        <joint name="arm_shoulder_pan_joint" value="0.000024" />
+        <joint name="arm_wrist_1_joint" value="0.60200" />
+        <joint name="arm_wrist_2_joint" value="0.22479" />
+        <joint name="arm_wrist_3_joint" value="-0.16767" />
+    </group_state>
+    
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="moveit_ee" parent_link="arm_tool0" group="endeffector" />
     <end_effector name="moveit_ee_linear" parent_link="arm_base_link" group="linear_endeffector"/>
